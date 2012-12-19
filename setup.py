@@ -14,6 +14,8 @@ requires = (
     'Babel',
     'lingua',
     'fanstatic',
+    'betahaus.pyracont',
+    'betahaus.viewcomponent',
     )
 
 setup(name='voteit.groups',
