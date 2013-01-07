@@ -39,6 +39,8 @@ setup(name='voteit.groups',
       tests_require= requires,
       test_suite="voteit.groups",
       entry_points = """\
+      [fanstatic.libraries]
+      groups_static = voteit.groups.fanstaticlib:groups_lib
       """,
       message_extractors = { '.': [
               ('**.py',   'lingua_python', None ),

@@ -1,0 +1,14 @@
+#group-proposals .outer-wrapper {
+	width: 100%;
+	margin: 0 auto;
+}
+#group-proposals .inner-wrapper {
+	width: 980px;
+    margin: 0 auto;
+}
+#group-proposals .group-section {
+    padding: 10px;
+}
+#group-proposals #group-header {
+    background: #ccc;
+}

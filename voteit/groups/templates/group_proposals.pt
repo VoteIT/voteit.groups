@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      metal:define-macro="master"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="voteit.groups">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="python web application" />
+    <meta name="description" content="pyramid web application" />
+    <tal:head tal:content="structure api.render_view_group(context, request, 'head')"></tal:head>
+    <metal:head define-slot="head"></metal:head>
+</head>
+<body id="group-proposals">
+
+<div class="outer-wrapper" id="group-header">
+    <div class="inner-wrapper">
+        <div class="group-section">
+            <h1 tal:condition="group">
+                ${group.title}
+                <a href="${request.resource_url(context, 'clear_group_to_work_as')}"
+                   title="Select another group" i18n:attributes="title">X</a>
+            </h1>
+            <h1 tal:condition="not group" i18n:translate="">Select group start</h1>
+        </div>
+    </div>
+</div>
+<div class="outer-wrapper" tal:condition="not active_group">
+    <div class="inner-wrapper">
+        <div class="group-section">
+            <tal:no_select_group condition="not selectable_groups">
+                You're not a member of any group
+            </tal:no_select_group>
+            <tal:select_group condition="selectable_groups">
+            Select group:
+            <ul>
+                <tal:iterate repeat="group selectable_groups">
+                    <li>
+                        <a href="${request.resource_url(context, 'set_group_to_work_as', query={'active_group': group.__name__})}">
+                            ${group.title}
+                        </a>
+                    </li>
+                </tal:iterate>
+            </ul>
+            </tal:select_group>
+        </div>
+    </div>
+</div>
+
+<div class="outer-wrapper">
+    <div class="inner-wrapper">
+        <div class="group-section">Hej</div>
+        <div class="group-section">Hej</div>
+        <div class="group-section">Hej</div>
+    </div>
+</div>
+</body>
+</html>

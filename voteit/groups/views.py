@@ -1,8 +1,10 @@
 import deform
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.httpexceptions import HTTPForbidden
 from betahaus.pyracont.factories import createSchema
 from betahaus.pyracont.factories import createContent
+from voteit.core.models.interfaces import IAgendaItem
 from voteit.core.models.interfaces import ISiteRoot
 from voteit.core.views.base_view import BaseView
 from voteit.core import security
@@ -10,6 +12,7 @@ from voteit.core import security
 from voteit.groups.interfaces import IGroup
 from voteit.groups.interfaces import IGroups
 from voteit.groups import VoteITGroupsMF as _
+from voteit.groups.fanstaticlib import group_proposals
 
 
 @view_config(name="groups", context = ISiteRoot)
@@ -55,3 +58,34 @@ class GroupView(BaseView):
         self.response['form'] = form.render(appstruct = appstruct, readonly = True)
         return self.response
 
+class GroupProposalsView(BaseView):
+    
+    @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.VIEW)
+    def view_group_proposals(self):
+        group_proposals.need()
+        active_group = self.api.user_profile.get_field_value('active_group', None)
+        groups = self.api.root['groups']
+        if active_group and active_group not in groups:
+            active_group = None
+        self.response['active_group'] = active_group
+        self.response['group'] = groups.get(active_group, None)
+        if not active_group:
+            self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
+        return self.response
+        
+    @view_config(name = "set_group_to_work_as", context = IAgendaItem)
+    def set_group_to_work_as(self):
+        selectable_group_ids = [x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)]
+        picked_group = self.request.GET.get('active_group', None)            
+        if picked_group not in selectable_group_ids:
+            raise HTTPForbidden(u"You can't select the group with id '%s'. Perhaps you're not a member of that group?" % picked_group)
+        self.api.user_profile.set_field_value('active_group', picked_group)
+        url = self.request.resource_url(self.context, 'group_proposals')
+        return HTTPFound(location = url)
+
+    @view_config(name = "clear_group_to_work_as", context = IAgendaItem)
+    def clear_group_to_work_as(self):
+        if 'active_group' in self.api.user_profile.field_storage:
+            del self.api.user_profile.field_storage['active_group']
+        url = self.request.resource_url(self.context, 'group_proposals')
+        return HTTPFound(location = url)

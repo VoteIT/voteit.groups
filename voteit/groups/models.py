@@ -23,6 +23,13 @@ class Groups(BaseContent):
     allowed_contexts = ()
     add_permission = None
 
+    def get_groups_for(self, userid):
+        groups = []
+        for obj in self.get_content(iface = IGroup, sort_on = 'title'):
+            if userid in obj.get_field_value('members'):
+                groups.append(obj)
+        return tuple(groups)
+
 
 @content_factory('Group', title=_(u"Group"))
 class Group(BaseContent):
