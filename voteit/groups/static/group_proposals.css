@@ -21,3 +21,24 @@
     float: left;
     width: 300px;
 }
+#group-proposals .set_state_radios {
+    float: left;
+    width: 60px;
+}
+#group-proposals .recommendation_area {
+    float: left;
+    width: 580px;
+}
+#group-proposals .recommendation_area textarea {
+    width: 100%;
+    height: 70px;
+}
+#group-proposals .recommendation_area button {
+    float: right;
+}
+#group-proposals .truncating_box {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    
+}

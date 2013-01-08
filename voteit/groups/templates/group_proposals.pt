@@ -10,6 +10,8 @@
     <meta name="description" content="pyramid web application" />
     <tal:head tal:content="structure api.render_view_group(context, request, 'head')"></tal:head>
     <metal:head define-slot="head"></metal:head>
+    <script type="text/javascript" src="${request.application_url}/translations.js"></script>
+
 </head>
 <body id="group-proposals">
 

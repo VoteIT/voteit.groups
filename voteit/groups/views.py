@@ -6,15 +6,19 @@ from betahaus.pyracont.factories import createSchema
 from betahaus.pyracont.factories import createContent
 from pyramid.security import effective_principals
 from pyramid.traversal import resource_path
+from pyramid.traversal import find_resource
+from pyramid.response import Response
 from repoze.catalog.query import Eq
 from repoze.catalog.query import Any
 from voteit.core.models.interfaces import IAgendaItem
+from voteit.core.models.interfaces import IProposal
 from voteit.core.models.interfaces import ISiteRoot
 from voteit.core.views.base_view import BaseView
 from voteit.core import security
 
 from voteit.groups.interfaces import IGroup
 from voteit.groups.interfaces import IGroups
+from voteit.groups.interfaces import IGroupRecommendations
 from voteit.groups import VoteITGroupsMF as _
 from voteit.groups.fanstaticlib import group_proposals
 
@@ -66,7 +70,7 @@ class GroupProposalsView(BaseView):
     
     @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.VIEW)
     def view_group_proposals(self):
-        group_proposals.need()
+        group_proposals.need() #js and css
         active_group = self.api.user_profile.get_field_value('active_group', None)
         groups = self.api.root['groups']
         if active_group and active_group not in groups:
@@ -109,6 +113,18 @@ class GroupProposalsView(BaseView):
     @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.VIEW,
                  renderer = 'templates/proposal_listing.pt') #xhr = True
     def group_proposal_listing(self):
+        active_group = self.api.user_profile.get_field_value('active_group', None)
+
+        def _find_object(path):
+            return find_resource(self.api.root, path)
+        self.response['find_object'] = _find_object
+
+        def _recommendation_for(obj):
+            recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)
+            res = recommendations.get_group_data(active_group)
+            return res and res or {}
+        self.response['recommendation_for'] = _recommendation_for
+
         query = Eq('path', resource_path(self.context)) & \
                 Eq('content_type', 'Proposal')
         total_count = self.api.root.catalog.query(query)[0]
@@ -123,3 +139,13 @@ class GroupProposalsView(BaseView):
             results.insert(0, get_metadata(docid))
         self.response['proposals'] = results
         return self.response
+
+    @view_config(name = "set_recommendation_data", context = IProposal, permission = security.VIEW) #FIXME: Permisisons
+    def set_recommendation_data(self):
+        active_group = self.api.user_profile.get_field_value('active_group', None)
+        #FIXME validation etc
+        recommend_state = self.request.POST.get('recommend_state')
+        recommend_text = self.request.POST.get('recommend_text')
+        recommendations = self.request.registry.getAdapter(self.context, IGroupRecommendations)
+        recommendations.set_group_data(active_group, state = recommend_state, text = recommend_text)
+        return Response('')
