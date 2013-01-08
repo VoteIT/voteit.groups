@@ -12,3 +12,17 @@
 #group-proposals #group-header {
     background: #ccc;
 }
+/* Sections have 920px to share between them */
+#group-proposals #hashtag-proposal-selection {
+    float: left;
+    width: 320px;
+}
+#group-proposals #recommendation-section {
+    float: left;
+    width: 300px;
+
+}
+#group-proposals #new-proposal-section {
+    float: left;
+    width: 300px;
+}

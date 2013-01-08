@@ -4,6 +4,10 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPForbidden
 from betahaus.pyracont.factories import createSchema
 from betahaus.pyracont.factories import createContent
+from pyramid.security import effective_principals
+from pyramid.traversal import resource_path
+from repoze.catalog.query import Eq
+from repoze.catalog.query import Any
 from voteit.core.models.interfaces import IAgendaItem
 from voteit.core.models.interfaces import ISiteRoot
 from voteit.core.views.base_view import BaseView
@@ -71,8 +75,19 @@ class GroupProposalsView(BaseView):
         self.response['group'] = groups.get(active_group, None)
         if not active_group:
             self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
+        self.response['available_hashtags'] = self.get_available_hashtags()
         return self.response
-        
+
+    def get_available_hashtags(self):
+        query = Eq('path', resource_path(self.context)) &\
+                Any('allowed_to_view', effective_principals(self.request)) &\
+                Eq('content_type', 'Proposal')
+        hashtags = set()
+        for docid in self.api.root.catalog.query(query)[1]:
+            metadata = self.api.root.catalog.document_map.get_metadata(docid)
+            hashtags.update(metadata.get('tags', ()))
+        return tuple(sorted(hashtags))
+
     @view_config(name = "set_group_to_work_as", context = IAgendaItem)
     def set_group_to_work_as(self):
         selectable_group_ids = [x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)]

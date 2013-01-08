@@ -47,11 +47,20 @@
     </div>
 </div>
 
-<div class="outer-wrapper">
+<div class="outer-wrapper" tal:condition="active_group">
     <div class="inner-wrapper">
-        <div class="group-section">Hej</div>
-        <div class="group-section">Hej</div>
-        <div class="group-section">Hej</div>
+        <div class="group-section" id="hashtag-proposal-selection">
+            <div id="selectable-hashtags">
+                <select>
+                  <option selected="true" value="">&lt;pick a hashtag&gt;</option>
+                  <tal:iterate repeat="tag available_hashtags">
+                      <option value="${tag}">${tag}</option>
+                  </tal:iterate>
+                </select>
+            </div>
+        </div>
+        <div class="group-section" id="recommendation-section">Hej</div>
+        <div class="group-section" id="new-proposal-section">Hej</div>
     </div>
 </div>
 </body>
