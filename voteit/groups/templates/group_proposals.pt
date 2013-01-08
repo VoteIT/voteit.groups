@@ -21,7 +21,7 @@
             <h1 tal:condition="group">
                 ${group.title}
                 <a href="${request.resource_url(context, 'clear_group_to_work_as')}"
-                   title="Select another group" i18n:attributes="title">X</a>
+                   title="Select another group" i18n:attributes="title" i18n:translate="">(change)</a>
             </h1>
             <h1 tal:condition="not group" i18n:translate="">Select group start</h1>
         </div>

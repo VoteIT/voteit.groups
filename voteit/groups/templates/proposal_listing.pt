@@ -19,7 +19,6 @@
                     Recommendation &raquo;
                 </h6>
                 <div class="minimizable_area">
-
                     <form method="POST"
                           enctype="multipart/form-data"
                           accept-charset="utf-8"
@@ -43,12 +42,14 @@
                     </form>
                 </div>
                 <div class="minimizable_inverted" tal:define="show_truncated current_recommend_state or text">
-                    <div tal:condition="show_truncated" class="iconpadding icon ${current_recommend_state}">
-                        <div class="truncating_box" tal:content="text">Truncated text</div>
+                    <div tal:condition="show_truncated" class="iconpadding icon ${current_recommend_state}" tal:content="text">
+                        Text
                     </div>
+                    <!--
                     <div tal:condition="not show_truncated">
                         Click above to write recommendation
                     </div>
+                    -->
                 </div>
             </div>
 

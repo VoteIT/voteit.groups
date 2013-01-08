@@ -36,9 +36,9 @@
 #group-proposals .recommendation_area button {
     float: right;
 }
-#group-proposals .truncating_box {
-    white-space: nowrap;
-    overflow: hidden;
-    width: 100%;
-    
+#group-proposals .listing_block {
+    border-bottom: 0 solid #ccc;
+    border-top: 1px solid #ccc;
+    padding-top: 5px;
+    margin-top: 10px;
 }
