@@ -76,6 +76,7 @@ class GroupProposalsView(BaseView):
         if not active_group:
             self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
         self.response['available_hashtags'] = self.get_available_hashtags()
+        self.response['selected_tag'] = self.request.GET.get('tag', '')
         return self.response
 
     def get_available_hashtags(self):
@@ -89,7 +90,7 @@ class GroupProposalsView(BaseView):
         return tuple(sorted(hashtags))
 
     @view_config(name = "set_group_to_work_as", context = IAgendaItem)
-    def set_group_to_work_as(self):
+    def set_group_to_work_as(self, permission = security.VIEW):
         selectable_group_ids = [x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)]
         picked_group = self.request.GET.get('active_group', None)            
         if picked_group not in selectable_group_ids:
@@ -98,9 +99,27 @@ class GroupProposalsView(BaseView):
         url = self.request.resource_url(self.context, 'group_proposals')
         return HTTPFound(location = url)
 
-    @view_config(name = "clear_group_to_work_as", context = IAgendaItem)
+    @view_config(name = "clear_group_to_work_as", context = IAgendaItem, permission = security.VIEW)
     def clear_group_to_work_as(self):
         if 'active_group' in self.api.user_profile.field_storage:
             del self.api.user_profile.field_storage['active_group']
         url = self.request.resource_url(self.context, 'group_proposals')
         return HTTPFound(location = url)
+
+    @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.VIEW,
+                 renderer = 'templates/proposal_listing.pt') #xhr = True
+    def group_proposal_listing(self):
+        query = Eq('path', resource_path(self.context)) & \
+                Eq('content_type', 'Proposal')
+        total_count = self.api.root.catalog.query(query)[0]
+        tag = self.request.GET.get('tag', None)
+        if tag:
+            query = query & Any('tags', (tag, ))
+        count, docids = self.api.root.catalog.query(query, sort_index='created', reverse=True)
+        get_metadata = self.api.root.catalog.document_map.get_metadata
+        results = []
+        for docid in docids:
+            #Insert the resolved docid first, since we need to reverse order again.
+            results.insert(0, get_metadata(docid))
+        self.response['proposals'] = results
+        return self.response

@@ -51,15 +51,17 @@
     <div class="inner-wrapper">
         <div class="group-section" id="hashtag-proposal-selection">
             <div id="selectable-hashtags">
-                <select>
-                  <option selected="true" value="">&lt;pick a hashtag&gt;</option>
+                <select id="pick-hashtag">
+                  <option tal:condition="selected_tag == ''" selected="selected" value="">&lt;all&gt;</option>
+                  <option tal:condition="selected_tag != ''" value="">&lt;all&gt;</option>
                   <tal:iterate repeat="tag available_hashtags">
-                      <option value="${tag}">${tag}</option>
+                      <option tal:condition="selected_tag == tag" value="${tag}" selected="selected">${tag}</option>
+                      <option tal:condition="selected_tag != tag" value="${tag}">${tag}</option>
                   </tal:iterate>
                 </select>
             </div>
+            <div id="proposal-listing"></div>
         </div>
-        <div class="group-section" id="recommendation-section">Hej</div>
         <div class="group-section" id="new-proposal-section">Hej</div>
     </div>
 </div>
