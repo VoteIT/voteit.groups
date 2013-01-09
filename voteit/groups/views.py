@@ -4,6 +4,7 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.httpexceptions import HTTPForbidden
 from betahaus.pyracont.factories import createSchema
 from betahaus.pyracont.factories import createContent
+from betahaus.viewcomponent import view_action
 from pyramid.security import effective_principals
 from pyramid.traversal import resource_path
 from pyramid.traversal import find_resource
@@ -159,3 +160,17 @@ class GroupProposalsView(BaseView):
         recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)
         res = recommendations.get_group_data(self.active_group)
         return res and res or {}
+
+
+@view_action('admin_menu', 'groups', title = _(u"Groups"))
+def groups_admin_menu_link(context, request, va, **kw):
+    api = kw['api']
+    url = request.resource_url(api.root, 'groups')
+    return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
+
+@view_action('context_actions', 'group_proposals', title = _(u"Group proposal recommendation"),
+             permission = security.MODERATE_MEETING, interface = IAgendaItem)
+def group_proposals_moderator_link(context, request, va, **kw):
+    api = kw['api']
+    url = request.resource_url(context, 'group_proposals')
+    return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
