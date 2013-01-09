@@ -59,7 +59,7 @@ class GroupsView(BaseView):
 
 class GroupView(BaseView):
     
-    @view_config(context = IGroup, renderer = "templates/group.pt", permission = security.MODERATE_MEETING)
+    @view_config(context = IGroup, renderer = "voteit.core.views:templates/base_edit.pt", permission = security.MODERATE_MEETING)
     def view_group(self):
         #FIXME: remove once done?
         schema = createSchema('EditGroupSchema').bind(context = self.context, request = self.request, api = self.api)
