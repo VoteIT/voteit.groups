@@ -23,18 +23,18 @@
                 <a href="${request.resource_url(context, 'clear_group_to_work_as')}"
                    title="Select another group" i18n:attributes="title" i18n:translate="">(change)</a>
             </h1>
-            <h1 tal:condition="not group" i18n:translate="">Select group start</h1>
+            <h1 tal:condition="not group" i18n:translate="">Select group to start</h1>
         </div>
     </div>
 </div>
 <div class="outer-wrapper" tal:condition="not active_group">
     <div class="inner-wrapper">
         <div class="group-section">
-            <tal:no_select_group condition="not selectable_groups">
+            <tal:no_select_group condition="not selectable_groups" i18n:translate="">
                 You're not a member of any group
             </tal:no_select_group>
             <tal:select_group condition="selectable_groups">
-            Select group:
+            <tal:trans i18n:translate="">Select group</tal:trans>:
             <ul>
                 <tal:iterate repeat="group selectable_groups">
                     <li>

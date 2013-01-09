@@ -10,3 +10,4 @@ def includeme(config):
     from .models import GroupRecommendations
     config.scan(PROJECTNAME)
     config.registry.registerAdapter(GroupRecommendations)
+    config.add_translation_dirs('%s:locale' % PROJECTNAME)

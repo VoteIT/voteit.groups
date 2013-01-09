@@ -1,0 +1,96 @@
+# Translations template for voteit.groups.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the voteit.groups project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+##, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: voteit.groups 0.1dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-01-09 16:36+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: voteit/groups/models.py:16 voteit/groups/models.py:24
+msgid "Groups"
+msgstr ""
+
+#: voteit/groups/models.py:36 voteit/groups/models.py:44
+#: voteit/groups/schemas.py:61
+msgid "Group"
+msgstr ""
+
+#. Default: GroupID must be 3-30 chars, start with lowercase a-z and only
+#. contain lowercase a-z, numbers, minus and underscore.
+#: voteit/groups/schemas.py:32
+msgid "groupid_char_error"
+msgstr ""
+
+#. Default: GroupID already used, pick another!
+#: voteit/groups/schemas.py:37
+msgid "groupid_already_registered_error"
+msgstr ""
+
+#: voteit/groups/schemas.py:43
+msgid "Add group"
+msgstr ""
+
+#. Default: An id for the group, you can't change this later on. Must only
+#. contain a-z, 0-9
+#: voteit/groups/schemas.py:46
+msgid "add_group_name_description"
+msgstr ""
+
+#: voteit/groups/schemas.py:54
+msgid "UserID"
+msgstr ""
+
+#: voteit/groups/views.py:43
+msgid "Add"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:23
+msgid "Select another group"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:23
+msgid "(change)"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:26
+msgid "Select group to start"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:33
+msgid "You're not a member of any group"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:37
+msgid "Select group"
+msgstr ""
+
+#: voteit/groups/templates/groups.pt:10
+msgid "Showing ${count} groups"
+msgstr ""
+
+#: voteit/groups/templates/groups.pt:22
+msgid "Edit"
+msgstr ""
+
+#: voteit/groups/templates/groups.pt:26
+msgid "Hashtag"
+msgstr ""
+
+#: voteit/groups/templates/proposal_listing.pt:19
+msgid "Recommendation"
+msgstr ""
+
+#: voteit/groups/templates/proposal_listing.pt:40
+msgid "Save"
+msgstr ""
+

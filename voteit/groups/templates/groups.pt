@@ -15,7 +15,7 @@
 </h1>
 <div metal:fill-slot="content" class="content_wrapper">
     
-    <tal:iterate repeat="group context.values()">
+    <tal:iterate repeat="group context.get_content(sort_on='title')">
         
         <tal:def define="members group.get_field_value('members')">
         <h3>${group.title} (${len(members)})</h3>
