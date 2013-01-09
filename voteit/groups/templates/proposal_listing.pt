@@ -44,14 +44,9 @@
                     
                 </div>
                 <div class="minimizable_inverted" tal:define="show_truncated current_recommend_state or text">
-                    <div tal:condition="show_truncated" class="recommend_text_readonly iconpadding icon ${current_recommend_state}" tal:content="text">
+                    <div class="recommend_text_readonly iconpadding icon ${current_recommend_state}" tal:content="text">
                         Text
                     </div>
-                    <!--
-                    <div tal:condition="not show_truncated">
-                        Click above to write recommendation
-                    </div>
-                    -->
                 </div>
             </div>
 
