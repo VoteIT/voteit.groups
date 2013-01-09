@@ -8,6 +8,8 @@ from pyramid.security import effective_principals
 from pyramid.traversal import resource_path
 from pyramid.traversal import find_resource
 from pyramid.response import Response
+from pyramid.renderers import render
+from pyramid.decorator import reify
 from repoze.catalog.query import Eq
 from repoze.catalog.query import Any
 from voteit.core.models.interfaces import IAgendaItem
@@ -34,7 +36,7 @@ def create_groups_content(context, request):
 class GroupsView(BaseView):
     #FIXME: Check permissions for all actions
 
-    @view_config(context = IGroups, renderer = "templates/groups.pt", permission = security.VIEW)
+    @view_config(context = IGroups, renderer = "templates/groups.pt", permission = security.MODERATE_MEETING)
     def view_groups(self):
         if self.api.show_moderator_actions:
             add_groups_schema = createSchema('AddGroupSchema').bind(context = self.context, request = self.request, api = self.api)
@@ -57,7 +59,7 @@ class GroupsView(BaseView):
 
 class GroupView(BaseView):
     
-    @view_config(context = IGroup, renderer = "templates/group.pt", permission = security.VIEW)
+    @view_config(context = IGroup, renderer = "templates/group.pt", permission = security.MODERATE_MEETING)
     def view_group(self):
         #FIXME: remove once done?
         schema = createSchema('EditGroupSchema').bind(context = self.context, request = self.request, api = self.api)
@@ -67,17 +69,21 @@ class GroupView(BaseView):
         return self.response
 
 class GroupProposalsView(BaseView):
+
+    @reify
+    def active_group(self):
+        group = self.api.user_profile.get_field_value('active_group', None)
+        if group and group not in self.api.root['groups']:
+            return None
+        return group
     
-    @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.VIEW)
+    @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.MODERATE_MEETING)
     def view_group_proposals(self):
         group_proposals.need() #js and css
-        active_group = self.api.user_profile.get_field_value('active_group', None)
         groups = self.api.root['groups']
-        if active_group and active_group not in groups:
-            active_group = None
-        self.response['active_group'] = active_group
-        self.response['group'] = groups.get(active_group, None)
-        if not active_group:
+        self.response['active_group'] = self.active_group
+        self.response['group'] = groups.get(self.active_group, None)
+        if not self.active_group:
             self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
         self.response['available_hashtags'] = self.get_available_hashtags()
         self.response['selected_tag'] = self.request.GET.get('tag', '')
@@ -110,20 +116,16 @@ class GroupProposalsView(BaseView):
         url = self.request.resource_url(self.context, 'group_proposals')
         return HTTPFound(location = url)
 
-    @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.VIEW,
+    @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.MODERATE_MEETING,
                  renderer = 'templates/proposal_listing.pt') #xhr = True
     def group_proposal_listing(self):
-        active_group = self.api.user_profile.get_field_value('active_group', None)
 
         def _find_object(path):
             return find_resource(self.api.root, path)
         self.response['find_object'] = _find_object
 
-        def _recommendation_for(obj):
-            recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)
-            res = recommendations.get_group_data(active_group)
-            return res and res or {}
-        self.response['recommendation_for'] = _recommendation_for
+        self.response['recommendation_for'] = self._recommendation_for
+        self.response['active_group'] = self.api.user_profile.get_field_value('active_group', None)
 
         query = Eq('path', resource_path(self.context)) & \
                 Eq('content_type', 'Proposal')
@@ -140,12 +142,20 @@ class GroupProposalsView(BaseView):
         self.response['proposals'] = results
         return self.response
 
-    @view_config(name = "set_recommendation_data", context = IProposal, permission = security.VIEW) #FIXME: Permisisons
+    @view_config(name = "set_recommendation_data", context = IProposal, permission = security.MODERATE_MEETING,
+                 renderer = 'json') #FIXME: Permisisons
     def set_recommendation_data(self):
         active_group = self.api.user_profile.get_field_value('active_group', None)
         #FIXME validation etc
-        recommend_state = self.request.POST.get('recommend_state')
-        recommend_text = self.request.POST.get('recommend_text')
+        data = dict(
+            state = self.request.POST.get('recommend_state'),
+            text = self.request.POST.get('recommend_text'),
+        )
         recommendations = self.request.registry.getAdapter(self.context, IGroupRecommendations)
-        recommendations.set_group_data(active_group, state = recommend_state, text = recommend_text)
-        return Response('')
+        recommendations.set_group_data(active_group, **data)
+        return data
+
+    def _recommendation_for(self, obj):
+        recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)
+        res = recommendations.get_group_data(self.active_group)
+        return res and res or {}

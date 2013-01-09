@@ -18,7 +18,8 @@
                 <h6 class="toggle_minimize">
                     Recommendation &raquo;
                 </h6>
-                <div class="minimizable_area">
+                <div class="minimizable_area recommendation_form">
+
                     <form method="POST"
                           enctype="multipart/form-data"
                           accept-charset="utf-8"
@@ -40,9 +41,10 @@
                             <button name="save" value="save" type="submit" class="btnText submit_recommendation">Save</button>
                         </div>
                     </form>
+                    
                 </div>
                 <div class="minimizable_inverted" tal:define="show_truncated current_recommend_state or text">
-                    <div tal:condition="show_truncated" class="iconpadding icon ${current_recommend_state}" tal:content="text">
+                    <div tal:condition="show_truncated" class="recommend_text_readonly iconpadding icon ${current_recommend_state}" tal:content="text">
                         Text
                     </div>
                     <!--
