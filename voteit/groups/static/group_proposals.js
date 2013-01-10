@@ -6,9 +6,11 @@ $('#pick-hashtag').live('change', function(event) {
 })
 
 function load_proposal_listing(tag) {
+    var target = $('#proposal-listing');
+    spinner().appendTo(target);
     var url = 'group_proposal_listing?tag=' + tag;
-    $('#proposal-listing').load(url, function(responseText, textStatus, xhr) {
-        //Spinner bs
+    target.load(url, function(responseText, textStatus, xhr) {
+        target.find('img.spinner').remove();
     })
 }
 
