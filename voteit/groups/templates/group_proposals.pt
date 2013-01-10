@@ -29,7 +29,7 @@
 </div>
 <div class="outer-wrapper" tal:condition="not active_group">
     <div class="inner-wrapper">
-        <div class="group-section">
+        <div class="group-section">            
             <tal:no_select_group condition="not selectable_groups" i18n:translate="">
                 You're not a member of any group
             </tal:no_select_group>
@@ -66,9 +66,12 @@
                 <input type="checkbox" id="show_all_groups" value="show_all_groups" name="show_all_groups"
                        i18n:translate="">Show all group recommendations</input>
             </div>
+            <div id="flash_messages"></div>
             <div id="proposal-listing"></div>
         </div>
-        <div class="group-section" id="new-proposal-section">Section for writing new proposals, soon...</div>
+        <div class="group-section" id="new-proposal-section">
+            <tal:new_prop content="structure api.render_single_view_component(context, request, 'proposals', 'add_form')">Form</tal:new_prop>
+        </div>
     </div>
 </div>
 </body>

@@ -33,7 +33,6 @@ $('.submit_recommendation').live('click', function(event) {
     $.post(form.attr('action'), form_data, function(data, textStatus, xhr) {
         //Update with response data
         var toggle_area = button.parents('.toggle_area');
-        console.log(data);
         var readonly_text = toggle_area.find('.recommend_text_readonly');
         readonly_text.removeClass('approved denied');
         readonly_text.addClass(data['state']);
@@ -51,6 +50,7 @@ $('.submit_recommendation').live('click', function(event) {
         //flash_message(voteit.translation['permssions_updated_error'], 'error', true);
     });
 })
+
 
 $(document).ready(function () {
     load_proposal_listing($('#pick-hashtag').val());
