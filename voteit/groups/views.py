@@ -73,17 +73,23 @@ class GroupProposalsView(BaseView):
 
     @reify
     def active_group(self):
+        """ Selected group id """
         group = self.api.user_profile.get_field_value('active_group', None)
         if group and group not in self.api.root['groups']:
             return None
         return group
-    
+
+    @reify
+    def group(self):
+        """ Group object if selected """
+        return self.api.root['groups'].get(self.active_group, None)
+
     @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.MODERATE_MEETING)
     def view_group_proposals(self):
         group_proposals.need() #js and css
         groups = self.api.root['groups']
         self.response['active_group'] = self.active_group
-        self.response['group'] = groups.get(self.active_group, None)
+        self.response['group'] = self.group
         if not self.active_group:
             self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
         self.response['available_hashtags'] = self.get_available_hashtags()
@@ -126,7 +132,8 @@ class GroupProposalsView(BaseView):
         self.response['find_object'] = _find_object
 
         self.response['recommendation_for'] = self._recommendation_for
-        self.response['active_group'] = self.api.user_profile.get_field_value('active_group', None)
+        self.response['active_group'] = self.active_group
+        self.response['group'] = self.group
 
         query = Eq('path', resource_path(self.context)) & \
                 Eq('content_type', 'Proposal')

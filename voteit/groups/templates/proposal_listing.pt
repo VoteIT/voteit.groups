@@ -16,7 +16,8 @@
                              current_recommend_state data.get('state', '');
                              text data.get('text','');">
                 <h6 class="toggle_minimize">
-                    <tal:translate i18n:translate="">Recommendation</tal:translate> &raquo;
+                    <tal:translate i18n:translate=""><tal:group i18n:name="group">${group.title}</tal:group> recommendation</tal:translate>
+                    &raquo;
                 </h6>
                 <div class="minimizable_area recommendation_form">
                     <form method="POST"
