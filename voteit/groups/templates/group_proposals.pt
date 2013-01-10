@@ -70,6 +70,7 @@
             <div id="proposal-listing"></div>
         </div>
         <div class="group-section" id="new-proposal-section">
+            (This function is under development and not finished)
             <tal:new_prop content="structure api.render_single_view_component(context, request, 'proposals', 'add_form')">Form</tal:new_prop>
         </div>
     </div>
