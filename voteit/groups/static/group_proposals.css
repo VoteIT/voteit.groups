@@ -9,6 +9,9 @@
 #group-proposals .group-section {
     padding: 10px;
 }
+#group-proposals #show_all_groups {
+
+}
 #group-proposals #group-header {
     background: #ccc;
 }
@@ -38,7 +41,18 @@
 }
 #group-proposals .listing_block {
     border-bottom: 0 solid #ccc;
+    border-top: 1px solid black;
+    padding-top: 10px;
+    margin-top: 20px;
+}
+#group-proposals .other_groups_recommendations {
     border-top: 1px solid #ccc;
-    padding-top: 5px;
-    margin-top: 10px;
+}
+#selectable-hashtags {
+    float: left;
+    width: 400px;
+}
+#show-groups {
+    float: left;
+    width: 240px;
 }

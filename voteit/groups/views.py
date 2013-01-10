@@ -132,8 +132,13 @@ class GroupProposalsView(BaseView):
         self.response['find_object'] = _find_object
 
         self.response['recommendation_for'] = self._recommendation_for
+        self.response['other_group_data'] = self._other_group_data
         self.response['active_group'] = self.active_group
         self.response['group'] = self.group
+        try:
+            self.response['show_all'] = int(self.request.GET.get('all', 0))
+        except ValueError:
+            self.response['show_all'] = 0
 
         query = Eq('path', resource_path(self.context)) & \
                 Eq('content_type', 'Proposal')
@@ -168,6 +173,10 @@ class GroupProposalsView(BaseView):
         res = recommendations.get_group_data(self.active_group)
         return res and res or {}
 
+    def _other_group_data(self, obj):
+        recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)
+        res = recommendations.get_other_group_data(self.active_group)
+        return res and res or {}
 
 @view_action('admin_menu', 'groups', title = _(u"Groups"))
 def groups_admin_menu_link(context, request, va, **kw):

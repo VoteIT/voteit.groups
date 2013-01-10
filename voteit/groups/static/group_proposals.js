@@ -1,3 +1,15 @@
+var show_all = 0;
+//Possibly use cookie
+
+function load_proposal_listing(tag, show_all) {
+    var target = $('#proposal-listing');
+    target.empty();
+    spinner().appendTo(target);
+    var url = 'group_proposal_listing?tag=' + tag + '&all=' + show_all;
+    target.load(url, function(responseText, textStatus, xhr) {
+        target.find('img.spinner').remove();
+    })
+}
 
 $('#pick-hashtag').live('change', function(event) {
     var tag = $(this).val();
@@ -5,17 +17,11 @@ $('#pick-hashtag').live('change', function(event) {
     window.location.assign('group_proposals?tag=' + tag);
 })
 
-function load_proposal_listing(tag) {
-    var target = $('#proposal-listing');
-    spinner().appendTo(target);
-    var url = 'group_proposal_listing?tag=' + tag;
-    target.load(url, function(responseText, textStatus, xhr) {
-        target.find('img.spinner').remove();
-    })
-}
-
-$(document).ready(function () {
-    load_proposal_listing($('#pick-hashtag').val());
+$('#show_all_groups').live('change', function(event) {
+    var box = $(this);
+    if (box.is(':checked')) { show_all = 1; }
+    else { show_all = 0; }
+    load_proposal_listing($('#pick-hashtag').val(), show_all);
 })
 
 $('.submit_recommendation').live('click', function(event) {
@@ -44,4 +50,8 @@ $('.submit_recommendation').live('click', function(event) {
         //FIXME: Insert flash messages somewhere
         //flash_message(voteit.translation['permssions_updated_error'], 'error', true);
     });
+})
+
+$(document).ready(function () {
+    load_proposal_listing($('#pick-hashtag').val());
 })

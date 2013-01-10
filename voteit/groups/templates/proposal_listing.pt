@@ -44,9 +44,19 @@
                     </form>
                     
                 </div>
-                <div class="minimizable_inverted" tal:define="show_truncated current_recommend_state or text">
-                    <div class="recommend_text_readonly iconpadding icon ${current_recommend_state}" tal:content="text">
-                        Text
+                <div class="minimizable_inverted">
+                    <div class="recommend_text_readonly iconpadding icon ${current_recommend_state}">
+                        ${text and text or ''}
+                    </div>
+                    <div class="other_groups_recommendations" tal:condition="show_all">
+                        <tal:data define="other_gdatas other_group_data(obj)">
+                            <tal:iter repeat="(gid, gdata) other_gdatas.items()">
+                                <h6>${api.root['groups']['gid'].title|gid} &raquo;</h6>
+                                <div class="iconpadding icon ${gdata.get('state', '')}">
+                                    ${gdata.get('text', '')}
+                                </div>
+                            </tal:iter>
+                        </tal:data>
                     </div>
                 </div>
             </div>

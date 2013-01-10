@@ -62,6 +62,7 @@ class GroupRecommendations(object):
         storage = self.context.get_field_value('group_recommendations', default)
         if storage is default:
             return default
+        #FIXME: Convert to dict to avoid accidental modification?
         return storage.get(group, default)
 
     def set_group_data(self, group, **kw):
@@ -70,3 +71,16 @@ class GroupRecommendations(object):
             storage = OOBTree()
             self.context.set_field_value('group_recommendations', storage)
         storage[group] = OOBTree(kw)
+
+    def get_other_group_data(self, group, default = None):
+        storage = self.context.get_field_value('group_recommendations', default)
+        if storage is default:
+            return default
+        result = {}
+        for (gid, data) in storage.items():
+            if gid == group:
+                continue
+            result[gid] = {}
+            for (k, v) in data.items():
+                result[gid][k] = v
+        return result

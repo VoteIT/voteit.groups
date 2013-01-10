@@ -62,6 +62,10 @@
                   </tal:iterate>
                 </select>
             </div>
+            <div id="show-groups">
+                <input type="checkbox" id="show_all_groups" value="show_all_groups" name="show_all_groups"
+                       i18n:translate="">Show all group recommendations</input>
+            </div>
             <div id="proposal-listing"></div>
         </div>
         <div class="group-section" id="new-proposal-section">Section for writing new proposals, soon...</div>
