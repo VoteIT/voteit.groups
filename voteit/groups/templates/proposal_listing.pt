@@ -46,14 +46,14 @@
                 </div>
                 <div class="minimizable_inverted">
                     <div class="recommend_text_readonly iconpadding icon ${current_recommend_state}">
-                        ${text and text or ''}
+                        ${text and text or u'&nbsp;'}
                     </div>
                     <div class="other_groups_recommendations" tal:condition="show_all">
                         <tal:data define="other_gdatas other_group_data(obj)">
                             <tal:iter repeat="(gid, gdata) other_gdatas.items()">
                                 <h6>${api.root['groups']['gid'].title|gid} &raquo;</h6>
                                 <div class="iconpadding icon ${gdata.get('state', '')}">
-                                    ${gdata.get('text', '')}
+                                    ${gdata.get('text', u'&nbsp;')}
                                 </div>
                             </tal:iter>
                         </tal:data>
