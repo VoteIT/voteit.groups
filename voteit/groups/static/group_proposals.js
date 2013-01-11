@@ -84,6 +84,7 @@ $('#new_proposal_section #deformadd').live('click', function(event) {
         if ($(data).find('.error').length > 0) {
             //Badness
         } else {
+            flash_message('Added', 'info', true);
             load_proposal_listing($('#pick-hashtag').val(), show_all);
         }
     })
@@ -92,13 +93,6 @@ $('#new_proposal_section #deformadd').live('click', function(event) {
         //FIXME: Flash message
         flash_message('Server error', 'error', true);
     });
-    /*
-    .success(function() {
-        button.find('img.spinner').remove();
-        //flash_message('Added', 'info', true);
-        //flash_message(voteit.translation['permssions_updated_success'], 'info', true);
-    })
-    */
 
 })
 

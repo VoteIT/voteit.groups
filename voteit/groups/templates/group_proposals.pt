@@ -72,6 +72,7 @@
         <div class="group-section">
             <div id="new_proposal_section" class="buttons">
                 <!-- Content here will be replaced by inline_propose_button so don't add anything else to the id new_proposal_section -->
+                (Under development and not finished!)
                 <tal:button replace="structure inline_propose_button" />
             </div>
         </div>
