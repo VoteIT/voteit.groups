@@ -42,7 +42,6 @@
                                     i18n:translate="">Save</button>
                         </div>
                     </form>
-                    
                 </div>
                 <div class="minimizable_inverted">
                     <div class="recommend_text_readonly iconpadding icon ${current_recommend_state}">

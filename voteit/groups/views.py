@@ -16,6 +16,7 @@ from repoze.catalog.query import Any
 from voteit.core.models.interfaces import IAgendaItem
 from voteit.core.models.interfaces import IProposal
 from voteit.core.models.interfaces import ISiteRoot
+from voteit.core.models.schemas import add_csrf_token
 from voteit.core.views.base_view import BaseView
 from voteit.core import security
 
@@ -94,6 +95,7 @@ class GroupProposalsView(BaseView):
             self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
         self.response['available_hashtags'] = self.get_available_hashtags()
         self.response['selected_tag'] = self.request.GET.get('tag', '')
+        self.response['inline_propose_button'] = self.inline_propose_button()
         return self.response
 
     def get_available_hashtags(self):
@@ -167,6 +169,50 @@ class GroupProposalsView(BaseView):
         recommendations = self.request.registry.getAdapter(self.context, IGroupRecommendations)
         recommendations.set_group_data(active_group, **data)
         return data
+
+    def inline_propose_button(self):
+        return u'<button id="add_propsal_button">%s</button>' % self.api.translate(_(u"Add proposal"))
+
+    def inline_proposal_form(self):
+        """ Adjusted so it also adds the groups hashtag.
+            Note that self.context must be an agenda item when using this.
+        """
+        schema = createSchema('ProposalSchema').bind(context = self.context, request = self.request, api = self.api)
+        add_csrf_token(self.context, self.request, schema)
+        #FIXME: Add tag to default schema item here
+        form = deform.Form(schema, buttons=('add',), action = '_inline_add_group_proposal')
+        return form
+
+    @view_config(name = "_inline_add_group_proposal", context = IAgendaItem, permission = security.ADD_PROPOSAL,
+                 renderer = 'voteit.core.views:templates/snippets/inline_form.pt')
+    def inline_propose_submit(self):
+
+        content_type = 'Proposal'
+        form = self.inline_proposal_form()
+
+        post = self.request.POST
+        if 'add' in post:
+            controls = post.items()
+            try:
+                appstruct = form.validate(controls)
+            except deform.ValidationFailure, e:
+                return Response(e.render())
+#                return Response(HTTPForbidden(e.render()))
+            #HTTPForbidden
+            kwargs = {}
+            kwargs.update(appstruct)
+            kwargs['creators'] = [self.api.userid]
+            obj = createContent(content_type, **kwargs)
+            name = obj.suggest_name(self.context)
+            self.context[name] = obj
+            return Response(self.inline_propose_button())
+
+        #Note! Registration of form resources has to be in the view that has the javascript
+        #that will include this!
+        self.response['form'] = form.render()
+        self.response['user_image_tag'] = self.api.user_profile.get_image_tag()
+        self.response['content_type'] = content_type
+        return self.response
 
     def _recommendation_for(self, obj):
         recommendations = self.request.registry.getAdapter(obj, IGroupRecommendations)

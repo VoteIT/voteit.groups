@@ -51,6 +51,56 @@ $('.submit_recommendation').live('click', function(event) {
     });
 })
 
+$('#add_propsal_button').live('click', function(event) {
+    try { event.preventDefault(); } catch(e) {};
+    var target = $(this).parents('#new_proposal_section');
+    spinner().appendTo(this);
+    var url = './_inline_add_group_proposal';
+    target.load(url, function(responseText, status, xhr) {
+         if (status == "error") {
+             //FIXME: Proper translated error text
+             flash_message('Add proposal error', 'error', true);
+         }
+         else {
+             //Good stuff?
+         }
+        target.find('img.spinner').remove();
+    })
+})
+
+$('#new_proposal_section #deformadd').live('click', function(event) {
+    try { event.preventDefault(); } catch(e) {};
+    var button = $(this);
+    spinner().appendTo(button);
+    var form = button.parents('form')
+    var form_data = form.serialize();
+    form_data += '&add=1'; //XXX Hack to make sure add is in there
+    $.post(form.attr('action'), form_data, function(data, status, xhr) {
+        //Update with response data
+        //debugger;
+        var target = $('#new_proposal_section');
+        target.empty();
+        target.html(data);
+        if ($(data).find('.error').length > 0) {
+            //Badness
+        } else {
+            load_proposal_listing($('#pick-hashtag').val(), show_all);
+        }
+    })
+    .error(function(xhr, status, error) {
+        button.find('img.spinner').remove();
+        //FIXME: Flash message
+        flash_message('Server error', 'error', true);
+    });
+    /*
+    .success(function() {
+        button.find('img.spinner').remove();
+        //flash_message('Added', 'info', true);
+        //flash_message(voteit.translation['permssions_updated_success'], 'info', true);
+    })
+    */
+
+})
 
 $(document).ready(function () {
     load_proposal_listing($('#pick-hashtag').val());

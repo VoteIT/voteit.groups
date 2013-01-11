@@ -69,9 +69,11 @@
             <div id="flash_messages"></div>
             <div id="proposal-listing"></div>
         </div>
-        <div class="group-section" id="new-proposal-section">
-            (This function is under development and not finished)
-            <tal:new_prop content="structure api.render_single_view_component(context, request, 'proposals', 'add_form')">Form</tal:new_prop>
+        <div class="group-section">
+            <div id="new_proposal_section" class="buttons">
+                <!-- Content here will be replaced by inline_propose_button so don't add anything else to the id new_proposal_section -->
+                <tal:button replace="structure inline_propose_button" />
+            </div>
         </div>
     </div>
 </div>
