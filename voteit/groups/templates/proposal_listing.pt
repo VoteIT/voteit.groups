@@ -1,4 +1,4 @@
-<div xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<tal:main xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
      xmlns:tal="http://xml.zope.org/namespaces/tal"
      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
      i18n:domain="voteit.groups">
@@ -51,8 +51,9 @@
                         <tal:data define="other_gdatas other_group_data(obj)">
                             <tal:iter repeat="(gid, gdata) other_gdatas.items()">
                                 <h6>${api.root['groups']['gid'].title|gid} &raquo;</h6>
-                                <div class="iconpadding icon ${gdata.get('state', '')}">
-                                    ${gdata.get('text', u'&nbsp;')}
+                                <div class="iconpadding icon ${gdata.get('state', '')}"
+                                     tal:define="text gdata.get('text', '')">
+                                    ${text and text or u'&nbsp;'}
                                 </div>
                             </tal:iter>
                         </tal:data>
@@ -63,5 +64,4 @@
         </tal:defs>
     </tal:iterate>
 
-
-</div>
+</tal:main>

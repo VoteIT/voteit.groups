@@ -38,7 +38,12 @@ $('.submit_recommendation').live('click', function(event) {
         var readonly_text = toggle_area.find('.recommend_text_readonly');
         readonly_text.removeClass('approved denied');
         readonly_text.addClass(data['state']);
-        readonly_text.html(data['text']);
+        if (data['text'].length == 0) {
+            readonly_text.html('&nbsp;');
+        }
+        else {
+            readonly_text.html(data['text']);
+        }
         var toggle_area = form.parents('.toggle_area');
         toggle_area.toggleClass('toggle_opened').toggleClass('toggle_closed'); //Toggle so area closes
     })
