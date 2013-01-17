@@ -50,7 +50,7 @@
                     <div class="other_groups_recommendations" tal:condition="show_all">
                         <tal:data define="other_gdatas other_group_data(obj)">
                             <tal:iter repeat="(gid, gdata) other_gdatas.items()">
-                                <h6>${api.root['groups']['gid'].title|gid} &raquo;</h6>
+                                <h6>${api.root['groups'][gid].title|gid} &raquo;</h6>
                                 <div class="iconpadding icon ${gdata.get('state', '')}"
                                      tal:define="text gdata.get('text', '')">
                                     ${text and text or u'&nbsp;'}
