@@ -70,6 +70,7 @@ class GroupView(BaseView):
         self.response['form'] = form.render(appstruct = appstruct, readonly = True)
         return self.response
 
+
 class GroupProposalsView(BaseView):
 
     @reify
@@ -85,7 +86,11 @@ class GroupProposalsView(BaseView):
         """ Group object if selected """
         return self.api.root['groups'].get(self.active_group, None)
 
-    @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.MODERATE_MEETING)
+    @reify
+    def selectable_group_ids(self):
+        return tuple([x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)])
+
+    @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.VIEW)
     def view_group_proposals(self):
         group_proposals.need() #js and css
         groups = self.api.root['groups']
@@ -108,11 +113,11 @@ class GroupProposalsView(BaseView):
             hashtags.update(metadata.get('tags', ()))
         return tuple(sorted(hashtags))
 
-    @view_config(name = "set_group_to_work_as", context = IAgendaItem)
-    def set_group_to_work_as(self, permission = security.VIEW):
-        selectable_group_ids = [x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)]
+    @view_config(name = "set_group_to_work_as", context = IAgendaItem, permission = security.VIEW)
+    def set_group_to_work_as(self):
+        """ Permissions are enforced in code below, so view permission works fine. """
         picked_group = self.request.GET.get('active_group', None)            
-        if picked_group not in selectable_group_ids:
+        if picked_group not in self.selectable_group_ids:
             raise HTTPForbidden(u"You can't select the group with id '%s'. Perhaps you're not a member of that group?" % picked_group)
         self.api.user_profile.set_field_value('active_group', picked_group)
         url = self.request.resource_url(self.context, 'group_proposals')
@@ -125,8 +130,8 @@ class GroupProposalsView(BaseView):
         url = self.request.resource_url(self.context, 'group_proposals')
         return HTTPFound(location = url)
 
-    @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.MODERATE_MEETING,
-                 renderer = 'templates/proposal_listing.pt') #xhr = True
+    @view_config(name = "group_proposal_listing", context = IAgendaItem, permission = security.VIEW,
+                 renderer = 'templates/proposal_listing.pt', xhr = True)
     def group_proposal_listing(self):
 
         def _find_object(path):
@@ -148,19 +153,19 @@ class GroupProposalsView(BaseView):
         tag = self.request.GET.get('tag', None)
         if tag:
             query = query & Any('tags', (tag, ))
-        count, docids = self.api.root.catalog.query(query, sort_index='created', reverse=True)
+        count, docids = self.api.root.catalog.query(query, sort_index='created')
         get_metadata = self.api.root.catalog.document_map.get_metadata
         results = []
         for docid in docids:
-            #Insert the resolved docid first, since we need to reverse order again.
-            results.insert(0, get_metadata(docid))
+            results.append(get_metadata(docid))
         self.response['proposals'] = results
         return self.response
 
-    @view_config(name = "set_recommendation_data", context = IProposal, permission = security.MODERATE_MEETING,
-                 renderer = 'json') #FIXME: Permisisons
+    @view_config(name = "set_recommendation_data", context = IProposal, permission = security.VIEW,
+                 renderer = 'json')
     def set_recommendation_data(self):
         active_group = self.api.user_profile.get_field_value('active_group', None)
+        assert active_group in self.selectable_group_ids #Extra safeguard, in case active_group is manipulated
         #FIXME validation etc
         data = dict(
             state = self.request.POST.get('recommend_state'),
@@ -186,10 +191,8 @@ class GroupProposalsView(BaseView):
     @view_config(name = "_inline_add_group_proposal", context = IAgendaItem, permission = security.ADD_PROPOSAL,
                  renderer = 'voteit.core.views:templates/snippets/inline_form.pt')
     def inline_propose_submit(self):
-
         content_type = 'Proposal'
         form = self.inline_proposal_form()
-
         post = self.request.POST
         if 'add' in post:
             controls = post.items()
@@ -197,8 +200,6 @@ class GroupProposalsView(BaseView):
                 appstruct = form.validate(controls)
             except deform.ValidationFailure, e:
                 return Response(e.render())
-#                return Response(HTTPForbidden(e.render()))
-            #HTTPForbidden
             kwargs = {}
             kwargs.update(appstruct)
             kwargs['creators'] = [self.api.userid]
@@ -230,9 +231,12 @@ def groups_admin_menu_link(context, request, va, **kw):
     url = request.resource_url(api.root, 'groups')
     return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
 
-@view_action('context_actions', 'group_proposals', title = _(u"Group proposal recommendation"),
+@view_action('proposals', 'group_proposals', title = _(u"Group recommendation (beta)"),
              permission = security.MODERATE_MEETING, interface = IAgendaItem)
 def group_proposals_moderator_link(context, request, va, **kw):
+    #FIXME: Move to some good area instead
     api = kw['api']
+    if not api.root['groups'].get_groups_for(api.userid):
+        return u""
     url = request.resource_url(context, 'group_proposals')
-    return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
+    return """<div><br/><br/><a href="%s" class="buttonize">%s</a></div>""" % (url, api.translate(va.title))
