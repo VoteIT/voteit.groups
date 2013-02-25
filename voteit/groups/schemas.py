@@ -30,7 +30,7 @@ class NewUniqueGroupID(object):
     def __call__(self, node, value):
         if not GROUP_PATTERN.match(value):
             msg = _('groupid_char_error',
-                    default=u"GroupID must be 3-30 chars, start with lowercase a-z and only contain lowercase a-z, numbers, minus and underscore.")
+                    default=u"GroupID must be 3-30 chars and only numbers, lowercase letters (a-z), minus and underscore.")
             raise colander.Invalid(node, msg)
         root = find_root(self.context)
         if value in root['groups']:
@@ -44,7 +44,7 @@ class NewUniqueGroupID(object):
 class AddGroupSchema(colander.Schema):
     name = colander.SchemaNode(colander.String(),
                                description = _(u"add_group_name_description",
-                                               default = u"An id for the group, you can't change this later on. Must only contain a-z, 0-9"),
+                                               default = u"An id for the group, you can't change this later on. OK chars are a-z, 0-9, minus and underscore."),
                                validator = deferred_new_groupid_validator,)
 
 

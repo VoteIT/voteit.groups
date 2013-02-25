@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: voteit.groups 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-01-09 16:36+0100\n"
+"POT-Creation-Date: 2013-02-25 15:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Generated-By: Babel 0.9.6\n"
 
 #: voteit/groups/models.py:16 voteit/groups/models.py:24
+#: voteit/groups/views.py:227
 msgid "Groups"
 msgstr ""
 
@@ -25,8 +26,8 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#. Default: GroupID must be 3-30 chars, start with lowercase a-z and only
-#. contain lowercase a-z, numbers, minus and underscore.
+#. Default: GroupID must be 3-30 chars and only numbers, lowercase letters
+#. (a-z), minus and underscore.
 #: voteit/groups/schemas.py:32
 msgid "groupid_char_error"
 msgstr ""
@@ -40,8 +41,8 @@ msgstr ""
 msgid "Add group"
 msgstr ""
 
-#. Default: An id for the group, you can't change this later on. Must only
-#. contain a-z, 0-9
+#. Default: An id for the group, you can't change this later on. OK chars are
+#. a-z, 0-9, minus and underscore.
 #: voteit/groups/schemas.py:46
 msgid "add_group_name_description"
 msgstr ""
@@ -50,28 +51,52 @@ msgstr ""
 msgid "UserID"
 msgstr ""
 
-#: voteit/groups/views.py:43
+#: voteit/groups/views.py:44
 msgid "Add"
 msgstr ""
 
-#: voteit/groups/templates/group_proposals.pt:23
+#: voteit/groups/views.py:178
+msgid "Add proposal"
+msgstr ""
+
+#: voteit/groups/views.py:233
+msgid "Group recommendations (beta)"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:12
 msgid "Select another group"
 msgstr ""
 
-#: voteit/groups/templates/group_proposals.pt:23
+#: voteit/groups/templates/group_proposals.pt:12
 msgid "(change)"
 msgstr ""
 
-#: voteit/groups/templates/group_proposals.pt:26
+#: voteit/groups/templates/group_proposals.pt:15
 msgid "Select group to start"
 msgstr ""
 
-#: voteit/groups/templates/group_proposals.pt:33
+#: voteit/groups/templates/group_proposals.pt:24
+msgid "Back"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:26
+msgid "Note: Group recommendations is under development and not finished!"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:36
 msgid "You're not a member of any group"
 msgstr ""
 
-#: voteit/groups/templates/group_proposals.pt:37
+#: voteit/groups/templates/group_proposals.pt:40
 msgid "Select group"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:56
+msgid "Proposals"
+msgstr ""
+
+#: voteit/groups/templates/group_proposals.pt:75
+msgid "Show all group recommendations"
 msgstr ""
 
 #: voteit/groups/templates/groups.pt:10
@@ -86,11 +111,11 @@ msgstr ""
 msgid "Hashtag"
 msgstr ""
 
-#: voteit/groups/templates/proposal_listing.pt:19
-msgid "Recommendation"
+#: voteit/groups/templates/proposal_listing.pt:20
+msgid "${group} recommendation"
 msgstr ""
 
-#: voteit/groups/templates/proposal_listing.pt:40
+#: voteit/groups/templates/proposal_listing.pt:42
 msgid "Save"
 msgstr ""
 
