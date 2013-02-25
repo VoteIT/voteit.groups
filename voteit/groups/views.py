@@ -182,7 +182,7 @@ class GroupProposalsView(BaseView):
             Note that self.context must be an agenda item when using this.
         """
         schema = createSchema('ProposalSchema').bind(context = self.context, request = self.request, api = self.api)
-        add_csrf_token(self.context, self.request, schema)
+        #FIXME: add_csrf_token(self.context, self.request, schema)
         #FIXME: Add tag to default schema item here
         form = deform.Form(schema, buttons=('add',), action = '_inline_add_group_proposal')
         return form

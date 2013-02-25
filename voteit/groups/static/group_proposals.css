@@ -1,59 +1,19 @@
-#group-proposals .outer-wrapper {
-	width: 100%;
-	margin: 0 auto;
-}
-#group-proposals .inner-wrapper {
-	width: 980px;
-    margin: 0 auto;
-}
-#group-proposals .group-section {
-    padding: 10px;
-}
-#group-proposals #show_all_groups {
-
-}
-#group-proposals #group-header {
-    background: #ccc;
-}
-/* Sections have 940px to share between them */
-#group-proposals #hashtag-proposal-selection {
+.set_state_radios {
     float: left;
-    width: 640px;
+    width: 58px;
 }
-#group-proposals #new_proposal_section {
+.recommendation_area {
     float: left;
     width: 300px;
 }
-#group-proposals .set_state_radios {
-    float: left;
-    width: 60px;
-}
-#group-proposals .recommendation_area {
-    float: left;
-    width: 580px;
-}
-#group-proposals .recommendation_area textarea {
-    width: 100%;
+.recommendation_area textarea {
+    width: 290px;
     height: 70px;
 }
-#group-proposals .recommendation_area button {
+.recommendation_area button {
     float: right;
 }
-#group-proposals .listing_block {
-    border-bottom: 0 solid #ccc;
-    border-top: 1px solid black;
-    padding-top: 10px;
-    margin-top: 20px;
-}
-#group-proposals .other_groups_recommendations {
+.other_groups_recommendations {
     margin-top: 10px;
     border-top: 1px solid #ccc;
-}
-#selectable-hashtags {
-    float: left;
-    width: 400px;
-}
-#show-groups {
-    float: left;
-    width: 240px;
 }

@@ -15,9 +15,10 @@
                  tal:define="data recommendation_for(obj);
                              current_recommend_state data.get('state', '');
                              text data.get('text','');">
-                <h6 class="toggle_minimize">
+                <h6>
+                    <a href="javascript:void()" class="toggle_minimize icon">
                     <tal:translate i18n:translate=""><tal:group i18n:name="group">${group.title}</tal:group> recommendation</tal:translate>
-                    &raquo;
+                    </a>
                 </h6>
                 <div class="minimizable_area recommendation_form">
                     <form method="POST"
@@ -50,7 +51,7 @@
                     <div class="other_groups_recommendations" tal:condition="show_all">
                         <tal:data define="other_gdatas other_group_data(obj)">
                             <tal:iter repeat="(gid, gdata) other_gdatas.items()">
-                                <h6>${api.root['groups'][gid].title|gid} &raquo;</h6>
+                                <h6>${api.root['groups'][gid].title|gid}</h6>
                                 <div class="iconpadding icon ${gdata.get('state', '')}"
                                      tal:define="text gdata.get('text', '')">
                                     ${text and text or u'&nbsp;'}

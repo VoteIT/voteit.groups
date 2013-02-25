@@ -1,35 +1,38 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
-      metal:define-macro="master"
+      metal:use-macro="load: ${api.template_dir}content.pt"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
       i18n:domain="voteit.groups">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="keywords" content="python web application" />
-    <meta name="description" content="pyramid web application" />
-    <tal:head tal:content="structure api.render_view_group(context, request, 'head')"></tal:head>
-    <metal:head define-slot="head"></metal:head>
-    <script type="text/javascript" src="${request.application_url}/translations.js"></script>
+<body>
+    <metal:heading fill-slot="page_heading">
+        <h1 id="page_heading" tal:condition="group">
+            ${group.title}
+            <a href="${request.resource_url(context, 'clear_group_to_work_as')}"
+               title="Select another group" i18n:attributes="title" i18n:translate="">(change)</a>
+        </h1>
+        <h1 id="page_heading" tal:condition="not group" i18n:translate="">Select group to start</h1>
+    </metal:heading>
+    <div metal:fill-slot="content">
 
-</head>
-<body id="group-proposals">
+        <tal:comment condition="False">
+            FIXME: Handle errors within js + any validation trouble
+            FIXME: When icons are clickable, they need to look clickable
+        </tal:comment>
 
-<div class="outer-wrapper" id="group-header">
-    <div class="inner-wrapper">
-        <div class="group-section">
-            <h1 tal:condition="group">
-                ${group.title}
-                <a href="${request.resource_url(context, 'clear_group_to_work_as')}"
-                   title="Select another group" i18n:attributes="title" i18n:translate="">(change)</a>
-            </h1>
-            <h1 tal:condition="not group" i18n:translate="">Select group to start</h1>
+        <a class="icon iconpadding arrow-left" href="${request.resource_url(context)}" i18n:translate="">Back</a>
+        
+        <div i18n:translate="">Note: Group recommendations is under development and not finished!</div>
+
+        <div tal:condition="active_group">
+            <h4>Members</h4>
+            <tal:defs define="members sorted(group.get_field_value('members', ()))">
+            <span tal:replace="structure api.get_creators_info(members, portrait = False)"></span>
+            </tal:defs>
         </div>
-    </div>
-</div>
-<div class="outer-wrapper" tal:condition="not active_group">
-    <div class="inner-wrapper">
-        <div class="group-section">            
+
+        <div tal:condition="not active_group">            
             <tal:no_select_group condition="not selectable_groups" i18n:translate="">
                 You're not a member of any group
             </tal:no_select_group>
@@ -46,13 +49,19 @@
             </ul>
             </tal:select_group>
         </div>
-    </div>
-</div>
 
-<div class="outer-wrapper" tal:condition="active_group">
-    <div class="inner-wrapper">
-        <div class="group-section" id="hashtag-proposal-selection">
-            <div id="selectable-hashtags">
+    </div><!-- content -->
+    <div metal:fill-slot="left" id="left">
+        <div id="proposals">
+            <h1 class="large-iconpadding icon proposal" i18n:translate="">Proposals</h1>
+            <div id="proposal-listing"></div>
+        </div>
+    </div>
+    <div metal:fill-slot="right" id="right">
+        <div tal:condition="active_group" id="hashtag-proposal-selection">
+            <h1>Handle groups</h1>
+            <div class="listing_block" id="selectable-hashtags">
+                Limit to tag:
                 <select id="pick-hashtag">
                   <option tal:condition="selected_tag == ''" selected="selected" value="">&lt;all&gt;</option>
                   <option tal:condition="selected_tag != ''" value="">&lt;all&gt;</option>
@@ -62,21 +71,16 @@
                   </tal:iterate>
                 </select>
             </div>
-            <div id="show-groups">
+            <div class="listing_block" id="show-groups">
                 <input type="checkbox" id="show_all_groups" value="show_all_groups" name="show_all_groups"
                        i18n:translate="">Show all group recommendations</input>
             </div>
-            <div id="flash_messages"></div>
-            <div id="proposal-listing"></div>
         </div>
-        <div class="group-section">
-            <div id="new_proposal_section" class="buttons">
-                <!-- Content here will be replaced by inline_propose_button so don't add anything else to the id new_proposal_section -->
-                (Under development and not finished!)
-                <tal:button replace="structure inline_propose_button" />
-            </div>
+        <div tal:condition="active_group" id="new_proposal_section" class="inline_add_form listing_block">
+            <!-- Content here will be replaced by inline_propose_button so don't add anything else to the id new_proposal_section -->
+            <tal:button replace="structure inline_propose_button" />
         </div>
     </div>
-</div>
 </body>
 </html>
+
