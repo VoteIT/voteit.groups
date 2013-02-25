@@ -9,7 +9,6 @@ from pyramid.security import effective_principals
 from pyramid.traversal import resource_path
 from pyramid.traversal import find_resource
 from pyramid.response import Response
-from pyramid.renderers import render
 from pyramid.decorator import reify
 from repoze.catalog.query import Eq
 from repoze.catalog.query import Any
@@ -231,12 +230,11 @@ def groups_admin_menu_link(context, request, va, **kw):
     url = request.resource_url(api.root, 'groups')
     return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
 
-@view_action('proposals', 'group_proposals', title = _(u"Group recommendation (beta)"),
-             permission = security.MODERATE_MEETING, interface = IAgendaItem)
+@view_action('agenda_item_top', 'group_proposals', title = _(u"Group recommendations (beta)"),
+             permission = security.VIEW, interface = IAgendaItem)
 def group_proposals_moderator_link(context, request, va, **kw):
-    #FIXME: Move to some good area instead
     api = kw['api']
     if not api.root['groups'].get_groups_for(api.userid):
         return u""
     url = request.resource_url(context, 'group_proposals')
-    return """<div><br/><br/><a href="%s" class="buttonize">%s</a></div>""" % (url, api.translate(va.title))
+    return """<div><br/><a href="%s" class="icon-right arrow-right">%s</a></div>""" % (url, api.translate(va.title))
