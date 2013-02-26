@@ -17,7 +17,7 @@
     
     <tal:iterate repeat="group context.get_content(sort_on='title')">
         
-        <tal:def define="members group.get_field_value('members')">
+        <tal:def define="members group.get_field_value('members', ())">
         <h3>${group.title} (${len(members)})</h3>
             <a class="buttonize"
                href="${request.resource_url(group, 'edit')}"
