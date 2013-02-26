@@ -1,11 +1,9 @@
 import re
 
 import colander
-import deform
 from betahaus.pyracont.decorators import schema_factory
 from pyramid.traversal import find_root
 
-from voteit.core.validators import html_string_validator
 from voteit.core.schemas.permissions import deferred_autocompleting_userid_widget
 from voteit.core.validators import deferred_existing_userid_validator
 
@@ -43,6 +41,7 @@ class NewUniqueGroupID(object):
                 title = _(u"Add group"),)
 class AddGroupSchema(colander.Schema):
     name = colander.SchemaNode(colander.String(),
+                               title = _(u"name"),
                                description = _(u"add_group_name_description",
                                                default = u"An id for the group, you can't change this later on. OK chars are a-z, 0-9, minus and underscore."),
                                validator = deferred_new_groupid_validator,)
@@ -62,5 +61,5 @@ class MembersSequence(colander.SequenceSchema):
 class EditGroupSchema(colander.Schema):
     title = colander.SchemaNode(colander.String())
     hashtag = colander.SchemaNode(colander.String()) #FIXME: uniqueness within other groups at least!
-    members = MembersSequence()
+    members = MembersSequence(title = _(u"Group members"))
 

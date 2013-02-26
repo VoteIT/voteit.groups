@@ -14,7 +14,7 @@ from repoze.catalog.query import Eq
 from repoze.catalog.query import Any
 from voteit.core.models.interfaces import IAgendaItem
 from voteit.core.models.interfaces import IProposal
-from voteit.core.models.interfaces import ISiteRoot
+from voteit.core.models.interfaces import IMeeting
 from voteit.core.models.schemas import add_csrf_token
 from voteit.core.views.base_view import BaseView
 from voteit.core import security
@@ -26,7 +26,7 @@ from voteit.groups import VoteITGroupsMF as _
 from voteit.groups.fanstaticlib import group_proposals
 
 
-@view_config(name="groups", context = ISiteRoot)
+@view_config(name="groups", context = IMeeting)
 def create_groups_content(context, request):
     """ This view will only be called if there's no groups object. """
     from voteit.groups.models import Groups
@@ -40,7 +40,9 @@ class GroupsView(BaseView):
     @view_config(context = IGroups, renderer = "templates/groups.pt", permission = security.MODERATE_MEETING)
     def view_groups(self):
         if self.api.show_moderator_actions:
-            add_groups_schema = createSchema('AddGroupSchema').bind(context = self.context, request = self.request, api = self.api)
+            add_groups_schema = createSchema('AddGroupSchema')
+            add_csrf_token(self.context, self.request, add_groups_schema)
+            add_groups_schema = add_groups_schema.bind(context = self.context, request = self.request, api = self.api)
             add_groups_form = deform.Form(add_groups_schema, buttons = (deform.Button('add', _(u"Add")),))
 
         if 'add' in self.request.POST:
@@ -63,7 +65,9 @@ class GroupView(BaseView):
     @view_config(context = IGroup, renderer = "voteit.core.views:templates/base_edit.pt", permission = security.MODERATE_MEETING)
     def view_group(self):
         #FIXME: remove once done?
-        schema = createSchema('EditGroupSchema').bind(context = self.context, request = self.request, api = self.api)
+        schema = createSchema('EditGroupSchema')
+        add_csrf_token(self.context, self.request, schema)
+        schema = schema.bind(context = self.context, request = self.request, api = self.api)
         form = deform.Form(schema, buttons = ())
         appstruct = self.context.get_field_appstruct(schema)
         self.response['form'] = form.render(appstruct = appstruct, readonly = True)
@@ -76,27 +80,31 @@ class GroupProposalsView(BaseView):
     def active_group(self):
         """ Selected group id """
         group = self.api.user_profile.get_field_value('active_group', None)
-        if group and group not in self.api.root['groups']:
+        if group and group not in self.groups:
             return None
         return group
 
     @reify
     def group(self):
         """ Group object if selected """
-        return self.api.root['groups'].get(self.active_group, None)
+        return self.groups.get(self.active_group, None)
+
+    @reify
+    def groups(self):
+        """ Groups folder for this meeting. """
+        return self.api.meeting['groups']
 
     @reify
     def selectable_group_ids(self):
-        return tuple([x.__name__ for x in self.api.root['groups'].get_groups_for(self.api.userid)])
+        return tuple([x.__name__ for x in self.groups.get_groups_for(self.api.userid)])
 
     @view_config(name = "group_proposals", context = IAgendaItem, renderer = "templates/group_proposals.pt", permission = security.VIEW)
     def view_group_proposals(self):
         group_proposals.need() #js and css
-        groups = self.api.root['groups']
         self.response['active_group'] = self.active_group
         self.response['group'] = self.group
         if not self.active_group:
-            self.response['selectable_groups'] = groups.get_groups_for(self.api.userid)
+            self.response['selectable_groups'] = self.groups.get_groups_for(self.api.userid)
         self.response['available_hashtags'] = self.get_available_hashtags()
         self.response['selected_tag'] = self.request.GET.get('tag', '')
         self.response['inline_propose_button'] = self.inline_propose_button()
@@ -136,7 +144,6 @@ class GroupProposalsView(BaseView):
         def _find_object(path):
             return find_resource(self.api.root, path)
         self.response['find_object'] = _find_object
-
         self.response['recommendation_for'] = self._recommendation_for
         self.response['other_group_data'] = self._other_group_data
         self.response['active_group'] = self.active_group
@@ -182,7 +189,6 @@ class GroupProposalsView(BaseView):
             Note that self.context must be an agenda item when using this.
         """
         schema = createSchema('ProposalSchema').bind(context = self.context, request = self.request, api = self.api)
-        #FIXME: add_csrf_token(self.context, self.request, schema)
         #FIXME: Add tag to default schema item here
         form = deform.Form(schema, buttons=('add',), action = '_inline_add_group_proposal')
         return form
@@ -224,17 +230,19 @@ class GroupProposalsView(BaseView):
         res = recommendations.get_other_group_data(self.active_group)
         return res and res or {}
 
-@view_action('admin_menu', 'groups', title = _(u"Groups"))
-def groups_admin_menu_link(context, request, va, **kw):
+@view_action('meeting', 'groups', title = _(u"Groups"))
+def groups_moderator_menu_link(context, request, va, **kw):
     api = kw['api']
-    url = request.resource_url(api.root, 'groups')
+    url = request.resource_url(api.meeting, 'groups')
     return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
 
 @view_action('agenda_item_top', 'group_proposals', title = _(u"Group recommendations (beta)"),
              permission = security.VIEW, interface = IAgendaItem)
-def group_proposals_moderator_link(context, request, va, **kw):
+def group_proposals_link(context, request, va, **kw):
     api = kw['api']
-    if not api.root['groups'].get_groups_for(api.userid):
+    if 'groups' not in api.meeting:
+        return u""
+    if not api.meeting['groups'].get_groups_for(api.userid):
         return u""
     url = request.resource_url(context, 'group_proposals')
     return """<div><br/><a href="%s" class="icon-right arrow-right">%s</a></div>""" % (url, api.translate(va.title))

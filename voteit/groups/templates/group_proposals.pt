@@ -37,7 +37,7 @@
                 You're not a member of any group
             </tal:no_select_group>
             <tal:select_group condition="selectable_groups">
-            <tal:trans i18n:translate="">Select group</tal:trans>:
+            <h3><tal:trans i18n:translate="">Select group</tal:trans>:</h3>
             <ul>
                 <tal:iterate repeat="group selectable_groups">
                     <li>
