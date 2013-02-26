@@ -41,7 +41,7 @@ class NewUniqueGroupID(object):
                 title = _(u"Add group"),)
 class AddGroupSchema(colander.Schema):
     name = colander.SchemaNode(colander.String(),
-                               title = _(u"name"),
+                               title = _(u"Name"),
                                description = _(u"add_group_name_description",
                                                default = u"An id for the group, you can't change this later on. OK chars are a-z, 0-9, minus and underscore."),
                                validator = deferred_new_groupid_validator,)

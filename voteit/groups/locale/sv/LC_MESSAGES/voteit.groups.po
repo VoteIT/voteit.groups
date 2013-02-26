@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: voteit.groups 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-02-25 15:28+0100\n"
-"PO-Revision-Date: 2013-02-25 15:28+0100\n"
+"POT-Creation-Date: 2013-02-26 14:30+0100\n"
+"PO-Revision-Date: 2013-02-26 14:30+0100\n"
 "Last-Translator: Robin Harms Oredsson <robin@betahaus.net>\n"
 "Language-Team: sv <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -20,53 +20,61 @@ msgstr ""
 "X-Generator: Poedit 1.5.5\n"
 
 #: voteit/groups/models.py:16 voteit/groups/models.py:24
-#: voteit/groups/views.py:227
+#: voteit/groups/views.py:233
 msgid "Groups"
 msgstr "Grupper"
 
 #: voteit/groups/models.py:36 voteit/groups/models.py:44
-#: voteit/groups/schemas.py:61
+#: voteit/groups/schemas.py:60
 msgid "Group"
 msgstr "Grupp"
 
 #. Default: GroupID must be 3-30 chars and only numbers, lowercase letters
 #. (a-z), minus and underscore.
-#: voteit/groups/schemas.py:32
+#: voteit/groups/schemas.py:30
 msgid "groupid_char_error"
 msgstr ""
 "GruppID måste vara 3-30 tecken och bara nummer, små bokstäver (a-z), minus "
 "eller understreck."
 
 #. Default: GroupID already used, pick another!
-#: voteit/groups/schemas.py:37
+#: voteit/groups/schemas.py:35
 msgid "groupid_already_registered_error"
 msgstr "GruppID redan använt, välj ett annat!"
 
-#: voteit/groups/schemas.py:43
+#: voteit/groups/schemas.py:41
 msgid "Add group"
 msgstr "Lägg till grupp"
 
+#: voteit/groups/schemas.py:44
+msgid "Name"
+msgstr "Namn"
+
 #. Default: An id for the group, you can't change this later on. OK chars are
 #. a-z, 0-9, minus and underscore.
-#: voteit/groups/schemas.py:46
+#: voteit/groups/schemas.py:45
 msgid "add_group_name_description"
 msgstr ""
 "Ett id för gruppen, du kan inte ändra detta senare. OK tecken är a-z, 0-9, "
 "minus och understreck."
 
-#: voteit/groups/schemas.py:54
+#: voteit/groups/schemas.py:53
 msgid "UserID"
 msgstr "AnvändarID"
 
-#: voteit/groups/views.py:44
+#: voteit/groups/schemas.py:64
+msgid "Group members"
+msgstr "Gruppmedlemmar"
+
+#: voteit/groups/views.py:46
 msgid "Add"
 msgstr "Lägg till"
 
-#: voteit/groups/views.py:178
+#: voteit/groups/views.py:185
 msgid "Add proposal"
 msgstr "Lägg till förslag"
 
-#: voteit/groups/views.py:233
+#: voteit/groups/views.py:239
 msgid "Group recommendations (beta)"
 msgstr "Grupprekommendationer (beta)"
 

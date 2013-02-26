@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: voteit.groups 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-02-25 15:28+0100\n"
+"POT-Creation-Date: 2013-02-26 14:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,49 +17,57 @@ msgstr ""
 "Generated-By: Babel 0.9.6\n"
 
 #: voteit/groups/models.py:16 voteit/groups/models.py:24
-#: voteit/groups/views.py:227
+#: voteit/groups/views.py:233
 msgid "Groups"
 msgstr ""
 
 #: voteit/groups/models.py:36 voteit/groups/models.py:44
-#: voteit/groups/schemas.py:61
+#: voteit/groups/schemas.py:60
 msgid "Group"
 msgstr ""
 
 #. Default: GroupID must be 3-30 chars and only numbers, lowercase letters
 #. (a-z), minus and underscore.
-#: voteit/groups/schemas.py:32
+#: voteit/groups/schemas.py:30
 msgid "groupid_char_error"
 msgstr ""
 
 #. Default: GroupID already used, pick another!
-#: voteit/groups/schemas.py:37
+#: voteit/groups/schemas.py:35
 msgid "groupid_already_registered_error"
 msgstr ""
 
-#: voteit/groups/schemas.py:43
+#: voteit/groups/schemas.py:41
 msgid "Add group"
+msgstr ""
+
+#: voteit/groups/schemas.py:44
+msgid "Name"
 msgstr ""
 
 #. Default: An id for the group, you can't change this later on. OK chars are
 #. a-z, 0-9, minus and underscore.
-#: voteit/groups/schemas.py:46
+#: voteit/groups/schemas.py:45
 msgid "add_group_name_description"
 msgstr ""
 
-#: voteit/groups/schemas.py:54
+#: voteit/groups/schemas.py:53
 msgid "UserID"
 msgstr ""
 
-#: voteit/groups/views.py:44
+#: voteit/groups/schemas.py:64
+msgid "Group members"
+msgstr ""
+
+#: voteit/groups/views.py:46
 msgid "Add"
 msgstr ""
 
-#: voteit/groups/views.py:178
+#: voteit/groups/views.py:185
 msgid "Add proposal"
 msgstr ""
 
-#: voteit/groups/views.py:233
+#: voteit/groups/views.py:239
 msgid "Group recommendations (beta)"
 msgstr ""
 
