@@ -28,7 +28,7 @@ class Groups(BaseContent):
     def get_groups_for(self, userid):
         groups = []
         for obj in self.get_content(iface = IGroup, sort_on = 'title'):
-            if userid in obj.get_field_value('members'):
+            if userid in obj.get_field_value('members', ()):
                 groups.append(obj)
         return tuple(groups)
 
