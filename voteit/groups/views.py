@@ -230,7 +230,7 @@ class GroupProposalsView(BaseView):
         res = recommendations.get_other_group_data(self.active_group)
         return res and res or {}
 
-@view_action('meeting', 'groups', title = _(u"Groups"))
+@view_action('participants_menu', 'groups', title = _(u"Groups"))
 def groups_moderator_menu_link(context, request, va, **kw):
     api = kw['api']
     url = request.resource_url(api.meeting, 'groups')
