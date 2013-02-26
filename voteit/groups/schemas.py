@@ -2,12 +2,13 @@ import re
 
 import colander
 from betahaus.pyracont.decorators import schema_factory
-from pyramid.traversal import find_root
-
+from pyramid.traversal import find_interface
 from voteit.core.schemas.permissions import deferred_autocompleting_userid_widget
 from voteit.core.validators import deferred_existing_userid_validator
+from voteit.core.models.interfaces import IMeeting
 
 from voteit.groups import VoteITGroupsMF as _
+
 
 GROUP_REGEXP = r"[a-z]{1}[a-z0-9-_]{2,30}"
 GROUP_PATTERN = re.compile(r'^'+GROUP_REGEXP+r'$')
@@ -30,8 +31,8 @@ class NewUniqueGroupID(object):
             msg = _('groupid_char_error',
                     default=u"GroupID must be 3-30 chars and only numbers, lowercase letters (a-z), minus and underscore.")
             raise colander.Invalid(node, msg)
-        root = find_root(self.context)
-        if value in root['groups']:
+        meeting = find_interface(self.context, IMeeting)
+        if value in meeting['groups']:
             msg = _('groupid_already_registered_error',
                     default=u"GroupID already used, pick another!")
             raise colander.Invalid(node, msg)
