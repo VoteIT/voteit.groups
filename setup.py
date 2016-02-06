@@ -11,11 +11,6 @@ requires = (
     'colander',
     'deform',
     'voteit.core',
-    'Babel',
-    'lingua',
-    'fanstatic',
-    'betahaus.pyracont',
-    'betahaus.viewcomponent',
     )
 
 setup(name='voteit.groups',
@@ -42,9 +37,4 @@ setup(name='voteit.groups',
       [fanstatic.libraries]
       groups_static = voteit.groups.fanstaticlib:groups_lib
       """,
-      message_extractors = { '.': [
-              ('**.py',   'lingua_python', None ),
-              ('**.pt',   'lingua_xml', None ),
-              ('**.zcml',   'lingua_zcml', None ),
-              ]},
       )

@@ -1,6 +1,6 @@
 from zope.interface import implements
 from zope.component import adapts
-from betahaus.pyracont.decorators import content_factory
+#from betahaus.pyracont.decorators import content_factory
 from BTrees.OOBTree import OOBTree
 from repoze.folder import unicodify
 from voteit.core import security
@@ -13,7 +13,7 @@ from voteit.groups.interfaces import IGroups
 from voteit.groups.interfaces import IGroupRecommendations
 
 
-@content_factory('Groups', title=_(u"Groups"))
+#@content_factory('Groups', title=_(u"Groups"))
 class Groups(BaseContent):
     """ Groups content type
         See :mod:`voteit.groups.interfaces.IGroups`.
@@ -33,7 +33,7 @@ class Groups(BaseContent):
         return tuple(groups)
 
 
-@content_factory('Group', title=_(u"Group"))
+#@content_factory('Group', title=_(u"Group"))
 class Group(BaseContent):
     """ Group content type.
         See :mod:`voteit.groups.interfaces.IGroup`.
