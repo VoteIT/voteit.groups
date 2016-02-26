@@ -1,0 +1,39 @@
+<tal:main xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="voteit.groups">
+<tal:iter repeat="(k, v) recommendations.items()">
+<tal:def define="state v.get('state', '');
+                 active False;">
+<div class="row">
+    <div class="col-xs-10 col-sm-9 col-md-10">
+        <span class="${'text-%s' % state} glyphicon glyphicon-${choice_icons.get(state, '')}"></span>
+        ${recommendations.group_title(k, request)}
+    </div>
+    <div class="col-xs-2 col-sm-3 col-md-2 text-right">
+        <a href="#" class="btn btn-default btn-sm">
+            <span class="glyphicon glyphicon-edit"></span>
+        </a>
+
+        <div tal:condition="False" class="btn-group"><!-- XXXX -->
+          <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span class="${'text-%s' % state} glyphicon glyphicon-${choice_icons.get(state, '')}"></span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+              <tal:iter tal:repeat="choice choices">
+                <li><a href="#">
+                    <span class="${'text-%s' % choice} glyphicon glyphicon-${choice_icons.get(choice, '')}"></span>
+                    ${choice_titles.get(choice, '')}
+                </a></li>
+              </tal:iter>
+          </ul>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">${v['text']}</div>
+</div>
+</tal:def>
+</tal:iter>
+</tal:main>

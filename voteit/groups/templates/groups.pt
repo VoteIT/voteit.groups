@@ -1,40 +1,44 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
       xmlns:tal="http://xml.zope.org/namespaces/tal"
-      metal:use-macro="load: ${api.template_dir}content.pt"
       xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="view.macro('arche:templates/base_view.pt', 'arche:templates/inline.pt')"
       i18n:domain="voteit.groups">
 <body>
-<h1 metal:fill-slot="page_heading">
-    <span i18n:translate="">
+<div metal:fill-slot="main-content">
+    <h1 i18n:translate="">
         Showing
         <span tal:replace="len(context)" i18n:name="count">5</span>
         groups
-    </span>
-</h1>
-<div metal:fill-slot="content" class="content_wrapper">
-    
+    </h1>
+
     <tal:iterate repeat="group context.get_content(sort_on='title')">
-        
-        <tal:def define="members group.get_field_value('members', ())">
-        <h3>${group.title} (${len(members)})</h3>
-            <a class="buttonize"
-               href="${request.resource_url(group, 'edit')}"
-               i18n:translate="">Edit</a>
-            <div>
-                <span i18n:translate="">Hashtag</span>: ${group.get_field_value('hashtag')}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h3 class="panel-title">
+                            ${group.title} (${len(group.members)})
+                        </h3>
+                    </div>
+                    <div class="col-sm-3">
+                        <strong tal:condition="group.hashtag">${group.hashtag}</strong>
+                    </div>
+                    <div class="col-sm-1">
+                        <a class="btn btn-default btn-xs pull-right"
+                           tal:condition="request.has_permission('perm:Edit', group)"
+                           href="${request.resource_url(group, 'edit')}"
+                           i18n:translate="">Edit</a>
+                    </div>
+                </div>
             </div>
-            <tal:members condition="members">
-                <ul>
-                    <li tal:repeat="userid members">${userid}</li>
-                </ul>
-            </tal:members>
-        </tal:def>
+            <div class="list-group" tal:condition="group.members">
+                <div class="list-group-item" tal:repeat="userid group.members">
+                    <span tal:replace="structure request.creators_info([userid], portrait = False)" />
+                </div>
+            </div>
+        </div>
     </tal:iterate>
-
-    <tal:addform replace="structure add_groups_form|''">Add form for moderators</tal:addform>
-
 </div>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<html xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns="http://www.w3.org/1999/xhtml"
+      metal:use-macro="view.macro('arche:templates/base_view.pt', 'arche:templates/inline.pt')"
+      i18n:domain="voteit.groups">
+<body>
+<div metal:fill-slot="main-content">
+    <img tal:replace="structure view.thumb_tag(context, 'col-2', extra_cls = 'pull-right')"/>
+    <div class="page-header">
+        <h1>${context.title}</h1>
+    </div>
+
+    ${structure: view.render_template('voteit.core:templates/snippets/ai_previous_next.pt', view_name = 'group_recommendations')}
+
+    <br/>
+
+    <div class="list-group">
+        <div class="list-group-item">
+            <h4>
+                <span i18n:translate="">Groups</span>
+            </h4>
+            <p>Click on a group to work as that group. If it's not clickable, you're not a member of that group.</p>
+            <a data-toggle="collapse" data-target="#groups-collapsible" href="javascript:">Visa</a>
+
+        </div>
+        <div class="collapse" id="groups-collapsible">
+            <div tal:repeat="group groups" class="list-group-item">
+                <a href="#">
+                    ${group.title}
+                </a>
+            </div>
+            <div class="well">
+                <a class="btn btn-sm btn-default"
+                   href="${request.resource_url(request.meeting, 'groups')}">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <span i18n:translate="">Edit or add groups</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

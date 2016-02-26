@@ -1,63 +1,50 @@
 # import deform
-# from pyramid.view import view_config
-# from pyramid.httpexceptions import HTTPFound
+from pyramid.view import view_config, view_defaults
+from pyramid.httpexceptions import HTTPFound
 # from pyramid.httpexceptions import HTTPForbidden
 # from betahaus.pyracont.factories import createSchema
 # from betahaus.pyracont.factories import createContent
-# from betahaus.viewcomponent import view_action
+from betahaus.viewcomponent import view_action
 # from pyramid.security import effective_principals
 # from pyramid.traversal import resource_path
 # from pyramid.traversal import find_resource
 # from pyramid.response import Response
-# from pyramid.decorator import reify
+from pyramid.decorator import reify
 # from repoze.catalog.query import Eq
 # from repoze.catalog.query import Any
-# from voteit.core.models.interfaces import IAgendaItem
-# from voteit.core.models.interfaces import IProposal
-# from voteit.core.models.interfaces import IMeeting
+from arche.portlets import PortletType
+from arche.views.base import BaseView
+from voteit.core.models.interfaces import IAgendaItem
+from voteit.core.models.interfaces import IProposal
+from voteit.core.models.interfaces import IMeeting
 # from voteit.core.models.schemas import add_csrf_token
 # from voteit.core.views.base_view import BaseView
-# from voteit.core import security
+from voteit.core import security
+from pyramid.renderers import render
+from voteit.core import _ as voteit_mf
 #
-# from voteit.groups.interfaces import IGroup
-# from voteit.groups.interfaces import IGroups
-# from voteit.groups.interfaces import IGroupRecommendations
-# from voteit.groups import VoteITGroupsMF as _
+from voteit.core.views.agenda_item import AgendaItemView
+from voteit.groups.interfaces import IGroup
+from voteit.groups.interfaces import IGroups
+from voteit.groups.interfaces import IGroupRecommendations
+from voteit.groups import _
 # from voteit.groups.fanstaticlib import group_proposals
 #
 #
-# @view_config(name="groups", context = IMeeting)
-# def create_groups_content(context, request):
-#     """ This view will only be called if there's no groups object. """
-#     from voteit.groups.models import Groups
-#     context['groups'] = Groups()
-#     return HTTPFound(location = request.resource_url(context['groups']))
-#
-#
-# class GroupsView(BaseView):
-#     #FIXME: Check permissions for all actions
-#
-#     @view_config(context = IGroups, renderer = "templates/groups.pt", permission = security.MODERATE_MEETING)
-#     def view_groups(self):
-#         if self.api.show_moderator_actions:
-#             add_groups_schema = createSchema('AddGroupSchema')
-#             add_csrf_token(self.context, self.request, add_groups_schema)
-#             add_groups_schema = add_groups_schema.bind(context = self.context, request = self.request, api = self.api)
-#             add_groups_form = deform.Form(add_groups_schema, buttons = (deform.Button('add', _(u"Add")),))
-#
-#         if 'add' in self.request.POST:
-#             controls = self.request.POST.items()
-#             try:
-#                 appstruct = add_groups_form.validate(controls)
-#             except deform.ValidationFailure, e:
-#                 self.response['add_groups_form'] = e.render()
-#                 return self.response
-#             group = self.context[appstruct['name']] = createContent('Group', creators = [self.api.userid])
-#             url = self.request.resource_url(group, 'edit')
-#             return HTTPFound(location = url)
-#
-#         self.response['add_groups_form'] = add_groups_form.render()
-#         return self.response
+@view_config(name="groups", context = IMeeting)
+def create_groups_content(context, request):
+    """ This view will only be called if there's no groups object. """
+    from voteit.groups.models import Groups
+    context['groups'] = Groups()
+    return HTTPFound(location = request.resource_url(context['groups']))
+
+
+class GroupsView(BaseView):
+    #FIXME: Check permissions for all actions
+
+    @view_config(context = IGroups, renderer = "voteit.groups:templates/groups.pt", permission = security.MODERATE_MEETING)
+    def view_groups(self):
+        return {}
 #
 #
 # class GroupView(BaseView):
@@ -230,19 +217,55 @@
 #         res = recommendations.get_other_group_data(self.active_group)
 #         return res and res or {}
 #
-# @view_action('participants_menu', 'groups', title = _(u"Groups"))
-# def groups_moderator_menu_link(context, request, va, **kw):
-#     api = kw['api']
-#     url = request.resource_url(api.meeting, 'groups')
-#     return """<li><a href="%s">%s</a></li>""" % (url, api.translate(va.title))
-#
-# @view_action('agenda_item_top', 'group_proposals', title = _(u"Group recommendations (beta)"),
-#              permission = security.VIEW, interface = IAgendaItem)
-# def group_proposals_link(context, request, va, **kw):
-#     api = kw['api']
-#     if 'groups' not in api.meeting:
-#         return u""
-#     if not api.meeting['groups'].get_groups_for(api.userid):
-#         return u""
-#     url = request.resource_url(context, 'group_proposals')
-#     return """<div><br/><a href="%s" class="icon-right arrow-right">%s</a></div>""" % (url, api.translate(va.title))
+@view_action('participants_menu', 'groups', title = _(u"Groups"))
+def groups_moderator_menu_link(context, request, va, **kw):
+    url = request.resource_url(request.meeting, 'groups')
+    return """<li><a href="%s">%s</a></li>""" % (url, request.localizer.translate(va.title))
+
+_CHOICES = ('approved', 'denied', 'unhandled', '')
+_CHOICE_TITLES = {'approved': voteit_mf("Approved"),
+                  'denied': voteit_mf("Denied"),
+                  'unhandled': voteit_mf("Unhandled"),
+                  '': _("<Not set>")}
+_CHOICE_ICONS = {'approved': 'approved',
+                  'denied': 'denied',
+                  'unhandled': 'unhandled',
+                  '': 'minus',}
+
+@view_action('metadata_listing', 'group_recommendation', interface = IProposal)
+def render_group_recommendation(context, request, va, **kw):
+    recommendations = request.registry.getAdapter(context, IGroupRecommendations)
+    if len(recommendations):
+        response = {'recommendations': recommendations, 'choices': _CHOICES, 'choice_titles': _CHOICE_TITLES, 'choice_icons': _CHOICE_ICONS}
+        return render('voteit.groups:templates/group_recommendation.pt', response, request = request)
+
+
+class GroupControlsPortlet(PortletType):
+    name = "voteit_groups_controls"
+    title = _("Group recommendations")
+
+    def render(self, context, request, view, **kwargs):
+        groups = request.meeting.get('groups', None)
+        if not groups:
+            return
+        response = {'title': _("Group recommendations"),
+                    'groups': groups,
+                    'portlet': self.portlet,
+                    'view': view,}
+        return render("voteit.groups:templates/group_controls.pt",
+                      response,
+                      request = request)
+
+#FIXME: Permission
+@view_defaults(context = IAgendaItem)
+class ManageGroupRecommendationView(AgendaItemView):
+
+
+    @view_config(name = 'group_recommendations', renderer = 'voteit.groups:templates/recommendation_main.pt')
+    def main(self):
+        return {'groups': self.request.meeting.get('groups', {}).values()}
+
+
+def includeme(config):
+    config.add_portlet(GroupControlsPortlet)
+    config.scan()
