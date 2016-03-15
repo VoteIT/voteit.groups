@@ -96,6 +96,16 @@ class GroupRecommendationTests(unittest.TestCase):
         self.assertEqual(dict(obj.get('200s')), {'we': 'are', 'found': 1})
         self.assertEqual(dict(obj.get('202s')), {'are': 'they', 'real': 1})
 
+    def test_count_states(self):
+        obj = self._cut(self._proposal())
+        obj['200s'] = {'state': 'one'}
+        obj['201s'] = {'state': 'one'}
+        obj['202s'] = {'state': 'one'}
+        obj['203s'] = {}
+        obj['204s'] = {'state': 'two'}
+        self.assertEqual(obj.count_states(),
+                         {'one': 3, '': 1, 'two': 1})
+
     def test_integration(self):
         self.config.include('arche.testing')
         self.config.include('arche.testing.portlets')

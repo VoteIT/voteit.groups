@@ -1,0 +1,23 @@
+<tal:main xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="voteit.groups">
+<a role="button"
+    data-toggle="popover"
+    data-trigger="click focus"
+    data-external-popover-loaded="false"
+    data-placement="bottom"
+    href="${request.resource_url(context, '_recommendation_popover')}"
+    class="btn btn-default btn-xs">
+<tal:iter repeat="state states">
+  <tal:valid_states condition="state">
+  ${state_count.get(state, 0)}
+  <span class="glyphicon glyphicon-${state_icons.get(state, '')} text-${state}"></span>
+  </tal:valid_states>
+<!-- 
+<div class="row">
+  
+</div> -->
+</tal:iter>
+</a>
+</tal:main>

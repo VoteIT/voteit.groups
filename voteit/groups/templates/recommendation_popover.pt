@@ -1,0 +1,14 @@
+<tal:main xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+     xmlns:tal="http://xml.zope.org/namespaces/tal"
+     xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+     i18n:domain="voteit.groups">
+  <tal:iter repeat="(k, v) recommendations.items()">
+  <tal:def condition="state" define="state v.get('state', '');">
+    <h5>
+      <span class="${'text-%s' % state} glyphicon glyphicon-${state_icons.get(state, '')}"></span>
+      ${recommendations.group_title(k, request)}
+    </h5>
+    ${v['text']}
+  </tal:def>
+  </tal:iter>
+</tal:main>

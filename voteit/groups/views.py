@@ -42,7 +42,9 @@ def create_groups_content(context, request):
 class GroupsView(BaseView):
     #FIXME: Check permissions for all actions
 
-    @view_config(context = IGroups, renderer = "voteit.groups:templates/groups.pt", permission = security.MODERATE_MEETING)
+    @view_config(context = IGroups,
+                 permission = security.MODERATE_MEETING,
+                 renderer = "voteit.groups:templates/groups.pt")
     def view_groups(self):
         return {}
 #
@@ -222,22 +224,36 @@ def groups_moderator_menu_link(context, request, va, **kw):
     url = request.resource_url(request.meeting, 'groups')
     return """<li><a href="%s">%s</a></li>""" % (url, request.localizer.translate(va.title))
 
-_CHOICES = ('approved', 'denied', 'unhandled', '')
-_CHOICE_TITLES = {'approved': voteit_mf("Approved"),
+_STATES = ('approved', 'denied', 'unhandled', '')
+_STATE_TITLES = {'approved': voteit_mf("Approved"),
                   'denied': voteit_mf("Denied"),
                   'unhandled': voteit_mf("Unhandled"),
                   '': _("<Not set>")}
-_CHOICE_ICONS = {'approved': 'approved',
+_STATE_ICONS = {'approved': 'approved',
                   'denied': 'denied',
                   'unhandled': 'unhandled',
                   '': 'minus',}
+
+#@view_action('metadata_listing', 'group_recommendation', interface = IProposal)
+#def render_group_recommendation(context, request, va, **kw):
+#    recommendations = request.registry.getAdapter(context, IGroupRecommendations)
+#    if len(recommendations):
+#        response = {'recommendations': recommendations,
+#                    'choices': _CHOICES,
+#                    'choice_titles': _CHOICE_TITLES,
+#                    'choice_icons': _CHOICE_ICONS}
+#        return render('voteit.groups:templates/group_recommendation.pt', response, request = request)
+
 
 @view_action('metadata_listing', 'group_recommendation', interface = IProposal)
 def render_group_recommendation(context, request, va, **kw):
     recommendations = request.registry.getAdapter(context, IGroupRecommendations)
     if len(recommendations):
-        response = {'recommendations': recommendations, 'choices': _CHOICES, 'choice_titles': _CHOICE_TITLES, 'choice_icons': _CHOICE_ICONS}
-        return render('voteit.groups:templates/group_recommendation.pt', response, request = request)
+        response = {'state_icons': _STATE_ICONS, 'states': _STATES,
+                    'state_count': recommendations.count_states(),
+                    'context': context}
+        return render('voteit.groups:templates/group_summary.pt', response, request = request)
+
 
 
 class GroupControlsPortlet(PortletType):
@@ -266,6 +282,17 @@ class ManageGroupRecommendationView(AgendaItemView):
         return {'groups': self.request.meeting.get('groups', {}).values()}
 
 
+#FIXME: Permission
+@view_defaults(context = IProposal)
+class ProposalGroupRecommendationView(BaseView):
+
+    @view_config(name = '_recommendation_popover',
+                 renderer = 'voteit.groups:templates/recommendation_popover.pt')
+    def popover(self):
+        return dict(recommendations = self.request.registry.getAdapter(self.context, IGroupRecommendations),
+                    state_icons = _STATE_ICONS)
+
+
 def includeme(config):
-    config.add_portlet(GroupControlsPortlet)
+#    config.add_portlet(GroupControlsPortlet)
     config.scan()

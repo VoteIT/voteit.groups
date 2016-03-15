@@ -97,6 +97,16 @@ class GroupRecommendations(IterableUserDict):
         group = groups.get(group_name, None)
         return group and group.title or group_name
 
+    def count_states(self):
+        results = {}
+        for v in self.values():
+            name = v.get('state', '')
+            if name in results:
+                results[name] += 1
+            else:
+                results[name] = 1
+        return results
+
     def __nonzero__(self):
         """ Make sure empty adapters are treated as bool true
         """
