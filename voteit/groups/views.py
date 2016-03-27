@@ -16,6 +16,7 @@ from voteit.groups.interfaces import IGroups
 from voteit.groups.interfaces import IGroupRecommendations
 from voteit.groups import _
 from voteit.groups.fanstaticlib import group_proposals
+from voteit.groups.security import allow_access
 
 
 def _in_any_group(request):
@@ -59,9 +60,10 @@ _STATE_ICONS = {'approved': 'glyphicon glyphicon-approved',
 
 @view_action('metadata_listing', 'group_recommendation', interface = IProposal)
 def render_group_recommendation(context, request, va, **kw):
-    recommendations = request.registry.getAdapter(context, IGroupRecommendations)
-    if len(recommendations):
-        response = {'state_icons': _STATE_ICONS, 'states': _STATES,
+    if allow_access(request):
+        recommendations = request.registry.getAdapter(context, IGroupRecommendations)
+        response = {'state_icons': _STATE_ICONS,
+                    'states': _STATES,
                     'state_count': recommendations.count_states(),
                     'context': context}
         return render('voteit.groups:templates/group_summary.pt', response, request = request)
@@ -73,7 +75,7 @@ class ManageGroupRecommendationView(AgendaItemView):
     @view_config(name = 'group_recommendations',
                  renderer = 'voteit.groups:templates/recommendation_main.pt')
     def main(self):
-        if not (self.request.is_moderator or _in_any_group(self.request)):
+        if not allow_access(self.request):
             raise HTTPForbidden("Access to groups requires that you're a moderator or a member of a group.")
         group_proposals.need()
         query = "type_name == 'Proposal' and path == '%s' and " % resource_path(self.context)

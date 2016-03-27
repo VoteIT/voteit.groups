@@ -25,6 +25,7 @@ class Groups(BaseContent):
     type_name = 'VoteITGroups'
     type_title = _(u"Groups")
     add_permission = "Add %s" % type_name
+    recommendation_visiblity = ""
 
     def get_groups_for(self, userid):
         groups = []
@@ -137,3 +138,4 @@ class GroupRecommendations(IterableUserDict):
 def includeme(config):
     config.registry.registerAdapter(GroupRecommendations)
     config.add_content_factory(Group, addable_to = 'VoteITGroups')
+    config.add_content_factory(Groups)
