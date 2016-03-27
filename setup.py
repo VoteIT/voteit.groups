@@ -11,6 +11,7 @@ requires = (
     'colander',
     'deform',
     'voteit.core',
+    'fanstatic',
     )
 
 setup(name='voteit.groups',
