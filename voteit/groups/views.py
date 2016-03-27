@@ -37,9 +37,7 @@ class GroupsView(BaseView):
                  permission = security.MODERATE_MEETING,
                  renderer = "voteit.groups:templates/groups.pt")
     def view_groups(self):
-        if self.request.is_moderator or _in_any_group(self.request):
-            return {}
-        raise HTTPForbidden("You're not allowed to access this")
+        return {}
 
 
 @view_action('participants_menu', 'groups', title = _(u"Groups"))
