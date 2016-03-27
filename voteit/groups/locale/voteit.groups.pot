@@ -1,129 +1,71 @@
-# Translations template for voteit.groups.
-# Copyright (C) 2013 ORGANIZATION
-# This file is distributed under the same license as the voteit.groups project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
-##, fuzzy
+#
+# SOME DESCRIPTIVE TITLE
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: voteit.groups 0.1dev\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-02-26 14:30+0100\n"
+"Project-Id-Version: PACKAGE 1.0\n"
+"POT-Creation-Date: 2016-03-27 16:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 0.9.6\n"
+"Language: \n"
+"Generated-By: Lingua 4.8.1\n"
 
-#: voteit/groups/models.py:16 voteit/groups/models.py:24
-#: voteit/groups/views.py:233
+#: ././voteit/groups/models.py:24 ././voteit/groups/models.py:26
+#: ././voteit/groups/views.py:45
+#: ././voteit/groups/templates/recommendation_main.pt:25
 msgid "Groups"
 msgstr ""
 
-#: voteit/groups/models.py:36 voteit/groups/models.py:44
-#: voteit/groups/schemas.py:60
+#: ././voteit/groups/models.py:44
 msgid "Group"
 msgstr ""
 
-#. Default: GroupID must be 3-30 chars and only numbers, lowercase letters
-#. (a-z), minus and underscore.
-#: voteit/groups/schemas.py:30
-msgid "groupid_char_error"
-msgstr ""
-
-#. Default: GroupID already used, pick another!
-#: voteit/groups/schemas.py:35
-msgid "groupid_already_registered_error"
-msgstr ""
-
-#: voteit/groups/schemas.py:41
-msgid "Add group"
-msgstr ""
-
-#: voteit/groups/schemas.py:44
-msgid "Name"
-msgstr ""
-
-#. Default: An id for the group, you can't change this later on. OK chars are
-#. a-z, 0-9, minus and underscore.
-#: voteit/groups/schemas.py:45
-msgid "add_group_name_description"
-msgstr ""
-
-#: voteit/groups/schemas.py:53
+#: ././voteit/groups/schemas.py:11
 msgid "UserID"
 msgstr ""
 
-#: voteit/groups/schemas.py:64
+#: ././voteit/groups/schemas.py:20
 msgid "Group members"
 msgstr ""
 
-#: voteit/groups/views.py:46
-msgid "Add"
+#: ././voteit/groups/views.py:55
+msgid "<Not set>"
 msgstr ""
 
-#: voteit/groups/views.py:185
-msgid "Add proposal"
-msgstr ""
-
-#: voteit/groups/views.py:239
-msgid "Group recommendations (beta)"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:12
-msgid "Select another group"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:12
-msgid "(change)"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:15
-msgid "Select group to start"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:24
-msgid "Back"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:26
-msgid "Note: Group recommendations is under development and not finished!"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:36
-msgid "You're not a member of any group"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:40
-msgid "Select group"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:56
-msgid "Proposals"
-msgstr ""
-
-#: voteit/groups/templates/group_proposals.pt:75
-msgid "Show all group recommendations"
-msgstr ""
-
-#: voteit/groups/templates/groups.pt:10
+#: ././voteit/groups/templates/groups.pt:9
 msgid "Showing ${count} groups"
 msgstr ""
 
-#: voteit/groups/templates/groups.pt:22
+#: ././voteit/groups/templates/groups.pt:31
 msgid "Edit"
 msgstr ""
 
-#: voteit/groups/templates/groups.pt:26
-msgid "Hashtag"
+#: ././voteit/groups/templates/recommendation_main.pt:36
+msgid "Select"
 msgstr ""
 
-#: voteit/groups/templates/proposal_listing.pt:20
-msgid "${group} recommendation"
+#: ././voteit/groups/templates/recommendation_main.pt:95
+msgid "Close"
 msgstr ""
 
-#: voteit/groups/templates/proposal_listing.pt:42
-msgid "Save"
+#: ././voteit/groups/templates/recommendation_main.pt:99
+msgid "Expand"
 msgstr ""
 
+#: ././voteit/groups/templates/recommendation_main.pt:109
+msgid "Recommendations from other groups"
+msgstr ""
+
+#: ././voteit/groups/templates/recommendation_main.pt:148
+msgid "Optional comment ..."
+msgstr ""
+
+#: ././voteit/groups/templates/recommendation_popover.pt:7
+msgid "Change recommendations"
+msgstr ""

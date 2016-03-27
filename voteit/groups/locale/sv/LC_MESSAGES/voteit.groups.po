@@ -8,128 +8,121 @@ msgid ""
 msgstr ""
 "Project-Id-Version: voteit.groups 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-02-26 14:30+0100\n"
-"PO-Revision-Date: 2013-02-26 14:30+0100\n"
+"POT-Creation-Date: 2016-03-27 16:23+0200\n"
+"PO-Revision-Date: 2016-03-27 16:25+0200\n"
 "Last-Translator: Robin Harms Oredsson <robin@betahaus.net>\n"
 "Language-Team: sv <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Generated-By: Babel 0.9.6\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.8.6\n"
 
-#: voteit/groups/models.py:16 voteit/groups/models.py:24
-#: voteit/groups/views.py:233
+#: voteit/groups/models.py:24 voteit/groups/models.py:26
+#: voteit/groups/views.py:45 voteit/groups/templates/recommendation_main.pt:25
 msgid "Groups"
 msgstr "Grupper"
 
-#: voteit/groups/models.py:36 voteit/groups/models.py:44
-#: voteit/groups/schemas.py:60
+#: voteit/groups/models.py:44
 msgid "Group"
 msgstr "Grupp"
 
-#. Default: GroupID must be 3-30 chars and only numbers, lowercase letters
-#. (a-z), minus and underscore.
-#: voteit/groups/schemas.py:30
-msgid "groupid_char_error"
-msgstr ""
-"GruppID måste vara 3-30 tecken och bara nummer, små bokstäver (a-z), minus "
-"eller understreck."
-
-#. Default: GroupID already used, pick another!
-#: voteit/groups/schemas.py:35
-msgid "groupid_already_registered_error"
-msgstr "GruppID redan använt, välj ett annat!"
-
-#: voteit/groups/schemas.py:41
-msgid "Add group"
-msgstr "Lägg till grupp"
-
-#: voteit/groups/schemas.py:44
-msgid "Name"
-msgstr "Namn"
-
-#. Default: An id for the group, you can't change this later on. OK chars are
-#. a-z, 0-9, minus and underscore.
-#: voteit/groups/schemas.py:45
-msgid "add_group_name_description"
-msgstr ""
-"Ett id för gruppen, du kan inte ändra detta senare. OK tecken är a-z, 0-9, "
-"minus och understreck."
-
-#: voteit/groups/schemas.py:53
+#: voteit/groups/schemas.py:11
 msgid "UserID"
 msgstr "AnvändarID"
 
-#: voteit/groups/schemas.py:64
+#: voteit/groups/schemas.py:20
 msgid "Group members"
 msgstr "Gruppmedlemmar"
 
-#: voteit/groups/views.py:46
-msgid "Add"
-msgstr "Lägg till"
+#: voteit/groups/views.py:55
+msgid "<Not set>"
+msgstr "<Inget satt>"
 
-#: voteit/groups/views.py:185
-msgid "Add proposal"
-msgstr "Lägg till förslag"
-
-#: voteit/groups/views.py:239
-msgid "Group recommendations (beta)"
-msgstr "Grupprekommendationer (beta)"
-
-#: voteit/groups/templates/group_proposals.pt:12
-msgid "Select another group"
-msgstr "Välj en annan grupp"
-
-#: voteit/groups/templates/group_proposals.pt:12
-msgid "(change)"
-msgstr "(ändra)"
-
-#: voteit/groups/templates/group_proposals.pt:15
-msgid "Select group to start"
-msgstr "Välj grupp för att starta"
-
-#: voteit/groups/templates/group_proposals.pt:24
-msgid "Back"
-msgstr "Tillbaka"
-
-#: voteit/groups/templates/group_proposals.pt:26
-msgid "Note: Group recommendations is under development and not finished!"
-msgstr "Obs: Grupprekommendationer är under utveckling och inte klart!"
-
-#: voteit/groups/templates/group_proposals.pt:36
-msgid "You're not a member of any group"
-msgstr "Du är inte medlem av någon grupp"
-
-#: voteit/groups/templates/group_proposals.pt:40
-msgid "Select group"
-msgstr "Välj grupp"
-
-#: voteit/groups/templates/group_proposals.pt:56
-msgid "Proposals"
-msgstr "Förslag"
-
-#: voteit/groups/templates/group_proposals.pt:75
-msgid "Show all group recommendations"
-msgstr "Visa alla grupprekommendationer"
-
-#: voteit/groups/templates/groups.pt:10
+#: voteit/groups/templates/groups.pt:9
 msgid "Showing ${count} groups"
 msgstr "Visar ${count} grupper"
 
-#: voteit/groups/templates/groups.pt:22
+#: voteit/groups/templates/groups.pt:31
 msgid "Edit"
 msgstr "Redigera"
 
-#: voteit/groups/templates/groups.pt:26
-msgid "Hashtag"
-msgstr "Hashtagg"
+#: voteit/groups/templates/recommendation_main.pt:36
+msgid "Select"
+msgstr "Välj"
 
-#: voteit/groups/templates/proposal_listing.pt:20
-msgid "${group} recommendation"
-msgstr "${group} rekommendation"
+#: voteit/groups/templates/recommendation_main.pt:95
+msgid "Close"
+msgstr "Stäng"
 
-#: voteit/groups/templates/proposal_listing.pt:42
-msgid "Save"
-msgstr "Spara"
+#: voteit/groups/templates/recommendation_main.pt:99
+msgid "Expand"
+msgstr "Expandera"
+
+#: voteit/groups/templates/recommendation_main.pt:109
+msgid "Recommendations from other groups"
+msgstr "Rekommendationer från andra grupper"
+
+#: voteit/groups/templates/recommendation_main.pt:148
+msgid "Optional comment ..."
+msgstr "Valfri kommentar …"
+
+#: voteit/groups/templates/recommendation_popover.pt:7
+msgid "Change recommendations"
+msgstr "Ändra rekommendationer"
+
+#~ msgid "groupid_char_error"
+#~ msgstr "GruppID måste vara 3-30 tecken och bara nummer, små bokstäver (a-z), minus eller understreck."
+
+#~ msgid "groupid_already_registered_error"
+#~ msgstr "GruppID redan använt, välj ett annat!"
+
+#~ msgid "Add group"
+#~ msgstr "Lägg till grupp"
+
+#~ msgid "Name"
+#~ msgstr "Namn"
+
+#~ msgid "add_group_name_description"
+#~ msgstr "Ett id för gruppen, du kan inte ändra detta senare. OK tecken är a-z, 0-9, minus och understreck."
+
+#~ msgid "Add"
+#~ msgstr "Lägg till"
+
+#~ msgid "Add proposal"
+#~ msgstr "Lägg till förslag"
+
+#~ msgid "Group recommendations (beta)"
+#~ msgstr "Grupprekommendationer (beta)"
+
+#~ msgid "Select another group"
+#~ msgstr "Välj en annan grupp"
+
+#~ msgid "(change)"
+#~ msgstr "(ändra)"
+
+#~ msgid "Select group to start"
+#~ msgstr "Välj grupp för att starta"
+
+#~ msgid "Back"
+#~ msgstr "Tillbaka"
+
+#~ msgid "Note: Group recommendations is under development and not finished!"
+#~ msgstr "Obs: Grupprekommendationer är under utveckling och inte klart!"
+
+#~ msgid "You're not a member of any group"
+#~ msgstr "Du är inte medlem av någon grupp"
+
+#~ msgid "Proposals"
+#~ msgstr "Förslag"
+
+#~ msgid "Hashtag"
+#~ msgstr "Hashtagg"
+
+#~ msgid "${group} recommendation"
+#~ msgstr "${group} rekommendation"
+
+#~ msgid "Save"
+#~ msgstr "Spara"
