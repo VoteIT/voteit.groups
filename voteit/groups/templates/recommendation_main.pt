@@ -30,7 +30,8 @@
         <div class="panel-body">
             <form class="form-horizontal" method="get" action="${request.resource_url(context, 'group_recommendations')}">
             <div class="form-group">
-                <label for="work-as-group" class="col-sm-3 control-label">Select group to work as</label>
+                <label for="work-as-group" class="col-sm-3 control-label"
+                       i18n:translate="">Select group to work as</label>
                 <div class="col-sm-9">
                     <select name="group" id="work-as-group" class="form-control">
                         <option value="">&lt;<tal:ts i18n:translate="">Select</tal:ts>&gt;</option>
@@ -44,7 +45,7 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-9">
-                  <button type="submit" class="btn btn-default">Work as</button>
+                  <button type="submit" class="btn btn-default" i18n:translate="">Work as</button>
                 </div>
             </div>
 

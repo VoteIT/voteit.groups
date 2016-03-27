@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE 1.0\n"
-"POT-Creation-Date: 2016-03-27 16:23+0200\n"
+"POT-Creation-Date: 2016-03-27 16:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,24 +17,44 @@ msgstr ""
 "Generated-By: Lingua 4.8.1\n"
 
 #: ././voteit/groups/models.py:24 ././voteit/groups/models.py:26
-#: ././voteit/groups/views.py:45
+#: ././voteit/groups/views.py:44
 #: ././voteit/groups/templates/recommendation_main.pt:25
 msgid "Groups"
 msgstr ""
 
-#: ././voteit/groups/models.py:44
+#: ././voteit/groups/models.py:45
 msgid "Group"
 msgstr ""
 
-#: ././voteit/groups/schemas.py:11
+#: ././voteit/groups/schemas.py:14
 msgid "UserID"
 msgstr ""
 
-#: ././voteit/groups/schemas.py:20
+#: ././voteit/groups/schemas.py:23
 msgid "Group members"
 msgstr ""
 
-#: ././voteit/groups/views.py:55
+#: ././voteit/groups/schemas.py:26
+msgid "<Select>"
+msgstr ""
+
+#: ././voteit/groups/schemas.py:31
+msgid "Recommendations visibility"
+msgstr ""
+
+#: ././voteit/groups/security.py:9
+msgid "Any"
+msgstr ""
+
+#: ././voteit/groups/security.py:10
+msgid "Members of any group"
+msgstr ""
+
+#: ././voteit/groups/security.py:11
+msgid "Only moderators"
+msgstr ""
+
+#: ././voteit/groups/views.py:54
 msgid "<Not set>"
 msgstr ""
 
@@ -46,23 +66,31 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: ././voteit/groups/templates/recommendation_main.pt:36
+#: ././voteit/groups/templates/recommendation_main.pt:34
+msgid "Select group to work as"
+msgstr ""
+
+#: ././voteit/groups/templates/recommendation_main.pt:37
 msgid "Select"
 msgstr ""
 
-#: ././voteit/groups/templates/recommendation_main.pt:95
+#: ././voteit/groups/templates/recommendation_main.pt:48
+msgid "Work as"
+msgstr ""
+
+#: ././voteit/groups/templates/recommendation_main.pt:96
 msgid "Close"
 msgstr ""
 
-#: ././voteit/groups/templates/recommendation_main.pt:99
+#: ././voteit/groups/templates/recommendation_main.pt:100
 msgid "Expand"
 msgstr ""
 
-#: ././voteit/groups/templates/recommendation_main.pt:109
+#: ././voteit/groups/templates/recommendation_main.pt:110
 msgid "Recommendations from other groups"
 msgstr ""
 
-#: ././voteit/groups/templates/recommendation_main.pt:148
+#: ././voteit/groups/templates/recommendation_main.pt:149
 msgid "Optional comment ..."
 msgstr ""
 

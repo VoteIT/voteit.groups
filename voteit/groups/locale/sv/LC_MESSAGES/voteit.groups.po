@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: voteit.groups 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-03-27 16:23+0200\n"
-"PO-Revision-Date: 2016-03-27 16:25+0200\n"
+"POT-Creation-Date: 2016-03-27 16:53+0200\n"
+"PO-Revision-Date: 2016-03-27 16:54+0200\n"
 "Last-Translator: Robin Harms Oredsson <robin@betahaus.net>\n"
 "Language-Team: sv <LL@li.org>\n"
 "Language: sv\n"
@@ -21,23 +21,43 @@ msgstr ""
 "X-Generator: Poedit 1.8.6\n"
 
 #: voteit/groups/models.py:24 voteit/groups/models.py:26
-#: voteit/groups/views.py:45 voteit/groups/templates/recommendation_main.pt:25
+#: voteit/groups/views.py:44 voteit/groups/templates/recommendation_main.pt:25
 msgid "Groups"
 msgstr "Grupper"
 
-#: voteit/groups/models.py:44
+#: voteit/groups/models.py:45
 msgid "Group"
 msgstr "Grupp"
 
-#: voteit/groups/schemas.py:11
+#: voteit/groups/schemas.py:14
 msgid "UserID"
 msgstr "AnvändarID"
 
-#: voteit/groups/schemas.py:20
+#: voteit/groups/schemas.py:23
 msgid "Group members"
 msgstr "Gruppmedlemmar"
 
-#: voteit/groups/views.py:55
+#: voteit/groups/schemas.py:26
+msgid "<Select>"
+msgstr "<Välj>"
+
+#: voteit/groups/schemas.py:31
+msgid "Recommendations visibility"
+msgstr "Rekommendationernas synlighet"
+
+#: voteit/groups/security.py:9
+msgid "Any"
+msgstr "Alla"
+
+#: voteit/groups/security.py:10
+msgid "Members of any group"
+msgstr "Medlemmar i någon grupp"
+
+#: voteit/groups/security.py:11
+msgid "Only moderators"
+msgstr "Bara moderatorer"
+
+#: voteit/groups/views.py:54
 msgid "<Not set>"
 msgstr "<Inget satt>"
 
@@ -49,23 +69,31 @@ msgstr "Visar ${count} grupper"
 msgid "Edit"
 msgstr "Redigera"
 
-#: voteit/groups/templates/recommendation_main.pt:36
+#: voteit/groups/templates/recommendation_main.pt:34
+msgid "Select group to work as"
+msgstr "Välj grupp att jobba som"
+
+#: voteit/groups/templates/recommendation_main.pt:37
 msgid "Select"
 msgstr "Välj"
 
-#: voteit/groups/templates/recommendation_main.pt:95
+#: voteit/groups/templates/recommendation_main.pt:48
+msgid "Work as"
+msgstr "Jobba som"
+
+#: voteit/groups/templates/recommendation_main.pt:96
 msgid "Close"
 msgstr "Stäng"
 
-#: voteit/groups/templates/recommendation_main.pt:99
+#: voteit/groups/templates/recommendation_main.pt:100
 msgid "Expand"
 msgstr "Expandera"
 
-#: voteit/groups/templates/recommendation_main.pt:109
+#: voteit/groups/templates/recommendation_main.pt:110
 msgid "Recommendations from other groups"
 msgstr "Rekommendationer från andra grupper"
 
-#: voteit/groups/templates/recommendation_main.pt:148
+#: voteit/groups/templates/recommendation_main.pt:149
 msgid "Optional comment ..."
 msgstr "Valfri kommentar …"
 
@@ -94,26 +122,17 @@ msgstr "Ändra rekommendationer"
 #~ msgid "Add proposal"
 #~ msgstr "Lägg till förslag"
 
-#~ msgid "Group recommendations (beta)"
-#~ msgstr "Grupprekommendationer (beta)"
-
 #~ msgid "Select another group"
 #~ msgstr "Välj en annan grupp"
 
 #~ msgid "(change)"
 #~ msgstr "(ändra)"
 
-#~ msgid "Select group to start"
-#~ msgstr "Välj grupp för att starta"
-
 #~ msgid "Back"
 #~ msgstr "Tillbaka"
 
 #~ msgid "Note: Group recommendations is under development and not finished!"
 #~ msgstr "Obs: Grupprekommendationer är under utveckling och inte klart!"
-
-#~ msgid "You're not a member of any group"
-#~ msgstr "Du är inte medlem av någon grupp"
 
 #~ msgid "Proposals"
 #~ msgstr "Förslag"
