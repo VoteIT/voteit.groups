@@ -15,30 +15,149 @@
 
     <br/>
 
-    <div class="list-group">
-        <div class="list-group-item">
-            <h4>
-                <span i18n:translate="">Groups</span>
-            </h4>
-            <p>Click on a group to work as that group. If it's not clickable, you're not a member of that group.</p>
-            <a data-toggle="collapse" data-target="#groups-collapsible" href="javascript:">Visa</a>
+    ${structure: context.description}
 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-sm-9 col-sm-offset-3">
+                    <h3 class="panel-title">
+                        <span i18n:translate="">Groups</span>
+                    </h3>
+                </div>
+            </div>
         </div>
-        <div class="collapse" id="groups-collapsible">
-            <div tal:repeat="group groups" class="list-group-item">
-                <a href="#">
-                    ${group.title}
-                </a>
+        <div class="panel-body">
+            <form class="form-horizontal" method="get" action="${request.resource_url(context, 'group_recommendations')}">
+            <div class="form-group">
+                <label for="work-as-group" class="col-sm-3 control-label">Select group to work as</label>
+                <div class="col-sm-9">
+                    <select name="group" id="work-as-group" class="form-control">
+                        <option value="">&lt;<tal:ts i18n:translate="">Select</tal:ts>&gt;</option>
+                        <option tal:repeat="group view.user_groups"
+                                value="${group.__name__}"
+                                tal:attributes="selected (view.gname and view.gname == group.__name__) and 'selected'">
+                            ${group.title}
+                        </option>
+                    </select>
+                </div>
             </div>
-            <div class="well">
-                <a class="btn btn-sm btn-default"
-                   href="${request.resource_url(request.meeting, 'groups')}">
-                    <span class="glyphicon glyphicon-edit"></span>
-                    <span i18n:translate="">Edit or add groups</span>
-                </a>
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-9">
+                  <button type="submit" class="btn btn-default">Work as</button>
+                </div>
             </div>
+
+            </form>
         </div>
     </div>
+
+    <div tal:repeat="proposal proposals"
+         class="panel panel-default">
+        <div class="panel-body">
+            ${structure: request.creators_info(proposal.creator)}
+            ${structure: request.transform_text(proposal.text)}
+        </div>
+        <div class="panel-body">
+            <div class=" row">
+              <div class="col-xs-6">
+                  #${proposal.aid}
+              </div>
+              <div class="col-xs-6 text-right text-muted">
+                <span class="glyphicon glyphicon-time"></span>
+                ${request.dt_handler.format_relative(proposal.created)}
+              </div>
+            </div>
+        </div>
+
+        <tal:recommendations define="recommendations view.get_rec(proposal)">
+        <a class="btn btn-default recommendations-bar-btn collapsed"
+           role="button"
+           data-toggle="collapse"
+           href="#${proposal.uid}-other-groups"
+           aria-expanded="false"
+           aria-controls="${proposal.uid}-other-groups"
+           tal:define="state_count recommendations.count_states()">
+            <span class="row">
+            <tal:iter repeat="state states">
+                <span class="col-sm-3 text-left" tal:condition="state">
+                <span class="${state_icons.get(state, '')}"></span>
+                ${state_count.get(state, 0)}
+                <span class="hidden-xs">${state_titles.get(state,'')}</span>
+                </span>
+            </tal:iter>
+                <span class="col-sm-1 text-left">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    ${state_count['comments']}
+                </span>
+                <span class="col-sm-2 text-right">
+                    <span class="show-expanded">
+                        <tal:ts i18n:translate="">Close</tal:ts>
+                        <span class="glyphicon glyphicon-collapse-up"></span>
+                    </span>
+                    <span class="show-collapsed" >
+                        <tal:ts i18n:translate="">Expand</tal:ts>
+                        <span class="glyphicon glyphicon-collapse-down"></span>
+                    </span>
+                </span>
+            </span>
+        </a>
+
+        <div class="panel-body collapse" id="${proposal.uid}-other-groups">
+
+            <tal:def define="state_sorted recommendations.get_state_sorted()">
+                <p tal:condition="view.gname" class="text-center text-muted" i18n:translate="">
+                    Recommendations from other groups
+                </p>
+                <div class="row">
+                <tal:states repeat="state states">
+                    <div class="col-xs-4 col-sm-3">
+                        <tal:iter repeat="group_name state_sorted.get(state, [])">
+                            <p tal:condition="group_name != view.gname">
+                                <span class="${'text-%s' % state} glyphicon glyphicon-${state_icons.get(state, '')}"></span>
+                                ${recommendations.group_title(group_name, request)}<br/>
+                                ${recommendations[group_name].get('text', '')}
+                            </p>
+                        </tal:iter>
+                    </div>
+                </tal:states>
+                </div>
+            </tal:def>
+        </div>
+
+        <div class="panel-footer" tal:condition="view.gname">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h5>${recommendations.group_title(view.gname, request)}</h5>
+                    <p><div class="btn-group btn-group-justified" role="group" aria-label="Submit">
+                        <tal:iter tal:repeat="state states">
+                          <a tal:define="is_selected recommendations.get(view.gname, {}).get('state', '') == state"
+                             data-state-button
+                             href="${request.resource_url(proposal, '_set_group_recommendation', query = {'group': view.gname, 'state': state})}"
+                             class="btn btn-${is_selected and 'primary' or 'default'} btn-sm">
+                              <span class="${not is_selected and 'text-%s' % state or None} ${state_icons.get(state, '')}"></span>
+                              ${state_titles.get(state, '')}
+                          </a>
+                        </tal:iter>
+                    </div></p>
+                <form method="post"
+                      action="${request.resource_url(proposal, '_set_group_recommendation_text', query = {'group': view.gname})}">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="2"
+                                  tal:define="text recommendations.get(view.gname, {}).get('text', '')"
+                                  placeholder="Optional comment ..."
+                                  name="text"
+                                  data-recommendation-text
+                                  i18n:attributes="placeholder">${text}</textarea>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+        </tal:recommendations>
+    </div>
+
+
 </div>
 </body>
 </html>

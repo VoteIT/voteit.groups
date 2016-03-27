@@ -45,6 +45,7 @@ class Group(BaseContent):
     add_permission = PERM_ADD_GROUP
     custom_mutators = {'members': '_set_members'}
     naming_attr = 'uid'
+    default_view = 'dynamic_view'
 
     @property
     def members(self):
@@ -80,8 +81,10 @@ class GroupRecommendations(IterableUserDict):
             value = OOBTree(value)
         self.context.set_field_value('group_recommendations', value)
 
-    def update(self, d, **kwargs):
-        raise NotImplementedError()
+    def update(self, key, **kwargs):
+        if key not in self:
+            self[key] = {}
+        self.data[key].update(kwargs)
 
     def __setitem__(self, key, item):
         if not isinstance(self.data, OOBTree):
@@ -98,13 +101,24 @@ class GroupRecommendations(IterableUserDict):
         return group and group.title or group_name
 
     def count_states(self):
-        results = {}
+        results = {'comments': 0}
         for v in self.values():
             name = v.get('state', '')
             if name in results:
                 results[name] += 1
             else:
                 results[name] = 1
+            if v.get('text', False):
+                results['comments'] += 1
+        return results
+
+    def get_state_sorted(self):
+        results = {}
+        for (k, v) in self.items():
+            state = v.get('state', '')
+            if state not in results:
+                results[state] = []
+            results[state].append(k)
         return results
 
     def __nonzero__(self):
@@ -118,33 +132,6 @@ class GroupRecommendations(IterableUserDict):
         return '<%s object with %s entries at %#x>' % (classname,
                                                        len(self),
                                                        id(self))
-
-    # def get_group_data(self, group, default = None):
-    #     storage = self.context.get_field_value('group_recommendations', default)
-    #     if storage is default:
-    #         return default
-    #     #FIXME: Convert to dict to avoid accidental modification?
-    #     return storage.get(group, default)
-    #
-    # def set_group_data(self, group, **kw):
-    #     storage = self.context.get_field_value('group_recommendations', None)
-    #     if storage is None:
-    #         storage = OOBTree()
-    #         self.context.set_field_value('group_recommendations', storage)
-    #     storage[group] = OOBTree(kw)
-    #
-    # def get_other_group_data(self, group, default = None):
-    #     storage = self.context.get_field_value('group_recommendations', default)
-    #     if storage is default:
-    #         return default
-    #     result = {}
-    #     for (gid, data) in storage.items():
-    #         if gid == group:
-    #             continue
-    #         result[gid] = {}
-    #         for (k, v) in data.items():
-    #             result[gid][k] = v
-    #     return result
 
 
 def includeme(config):

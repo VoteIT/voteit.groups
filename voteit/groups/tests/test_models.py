@@ -104,11 +104,12 @@ class GroupRecommendationTests(unittest.TestCase):
         obj['203s'] = {}
         obj['204s'] = {'state': 'two'}
         self.assertEqual(obj.count_states(),
-                         {'one': 3, '': 1, 'two': 1})
+                         {'one': 3, '': 1, 'two': 1, 'comments': 0})
 
     def test_integration(self):
         self.config.include('arche.testing')
         self.config.include('arche.testing.portlets')
+        self.config.include('voteit.core')
         self.config.include('voteit.groups')
         prop = self._proposal()
         adapter = self.config.registry.queryAdapter(prop, IGroupRecommendations)

@@ -12,12 +12,8 @@
 <tal:iter repeat="state states">
   <tal:valid_states condition="state">
   ${state_count.get(state, 0)}
-  <span class="glyphicon glyphicon-${state_icons.get(state, '')} text-${state}"></span>
+  <span class="${state_icons.get(state, '')} text-${state}"></span>
   </tal:valid_states>
-<!-- 
-<div class="row">
-  
-</div> -->
 </tal:iter>
 </a>
 </tal:main>

@@ -15,7 +15,8 @@ class MembersSequence(colander.SequenceSchema):
 
 class GroupSchema(colander.Schema):
     title = colander.SchemaNode(colander.String())
-    hashtag = colander.SchemaNode(colander.String()) #FIXME: uniqueness within other groups at least!
+    hashtag = colander.SchemaNode(colander.String(),
+                                  missing = "") #FIXME: uniqueness within other groups at least!
     members = MembersSequence(title = _(u"Group members"))
 
 
