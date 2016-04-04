@@ -106,6 +106,11 @@ class GroupRecommendationTests(unittest.TestCase):
         self.assertEqual(obj.count_states(),
                          {'one': 3, '': 1, 'two': 1, 'comments': 0})
 
+    def test_update(self):
+        obj = self._cut(self._proposal())
+        obj.update('group', state = 'state')
+        self.assertEqual(obj['group']['state'], 'state')
+
     def test_integration(self):
         self.config.include('arche.testing')
         self.config.include('arche.testing.portlets')

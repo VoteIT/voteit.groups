@@ -4,7 +4,6 @@ function update_recommendation_state(event) {
     var request = arche.do_request($(event.currentTarget).attr('href'));
     elem = $(event.currentTarget);
     request.done(function() {
-        console.log(elem);
         elem.parent().children(['data-state-button']).removeClass('btn-primary').addClass('btn-default');
         elem.addClass('btn-primary');
     });

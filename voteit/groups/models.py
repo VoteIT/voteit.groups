@@ -72,15 +72,11 @@ class GroupRecommendations(IterableUserDict):
 
     def __init__(self, context):
         self.context = context
-
-    @property
-    def data(self):
-        return self.context.get_field_value('group_recommendations', {})
-    @data.setter
-    def data(self, value):
-        if not isinstance(value, OOBTree):
-            value = OOBTree(value)
-        self.context.set_field_value('group_recommendations', value)
+        try:
+            self.data = self.context.field_storage['group_recommendations']
+        except KeyError:
+            self.context.set_field_value('group_recommendations', OOBTree())
+            self.data = self.context.field_storage['group_recommendations']
 
     def update(self, key, **kwargs):
         if key not in self:
@@ -88,8 +84,6 @@ class GroupRecommendations(IterableUserDict):
         self.data[key].update(kwargs)
 
     def __setitem__(self, key, item):
-        if not isinstance(self.data, OOBTree):
-            self.data = OOBTree()
         self.data[key] = OOBTree(item)
 
     def group_title(self, group_name, request = None):
